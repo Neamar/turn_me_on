@@ -22,6 +22,9 @@ levels = (
   # INTRODUCE N
   ('T↕↕N', '0010'), # 24
   ('∀↕↕CTN', '001000'), # 646
+  ('NC∀∀', '0011'), # 12121
+  ('↕↕N↕', '0101'), # 123324
+  ('T∀N∀∀∀', '001110'), #13123233313
 )
 
 for index, (level, initial_state) in enumerate(levels):
