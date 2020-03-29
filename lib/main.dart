@@ -15,14 +15,14 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text("Turn me on"),
         ),
-        body: Level(toggles: '∀TT∀', initialState: '0110'),
+        body: Level('T↕TT∀T', '111001'),
       ),
     );
   }
 }
 
 class Level extends StatefulWidget {
-  Level({Key key, this.toggles, this.initialState}) : super(key: key);
+  Level(this.toggles, this.initialState);
 
   final String toggles;
   final String initialState;
@@ -66,6 +66,15 @@ class _LevelState extends State<Level> {
       } else if (toggleType == SWITCH_ALL) {
         for(int i = 0; i < _currentState.length; i++) {
           newState = _switchToggleInState(i, newState);
+        }
+      }
+      else if(toggleType == SWITCH_AROUND) {
+        if(toggleIndex > 0) {
+          newState = _switchToggleInState(toggleIndex - 1, newState);
+        }
+        newState = _switchToggleInState(toggleIndex, newState);
+        if(toggleIndex < toggles.length - 1) {
+          newState = _switchToggleInState(toggleIndex + 1,newState);
         }
       }
       print("New States is " + newState);
