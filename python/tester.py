@@ -38,7 +38,8 @@ def explore(level, state):
   """
   reachable_states = []
   for toggle_index in range(len(level)):
-    reachable_states.append((press_switch(toggle_index, level, state), toggle_index))
+    # Store new state, and action that had to be taken to get there (actions are 1-indexed)
+    reachable_states.append((press_switch(toggle_index, level, state), toggle_index + 1))
 
   return reachable_states
 
@@ -70,5 +71,14 @@ def solve_level(level, intial_state):
         known_states.add(str_state)
 
 
-solution = solve_level('TTT∀', '0000')
-print("Level solution: %s" % solution)
+levels = (
+  ('T', '0'),
+  ('TTT∀', '0000'),
+)
+
+for level, initial_state in levels:
+  if len(level) != len(initial_state):
+    raise Exception("State and level must have the same length")
+
+  solution = solve_level(level, initial_state)
+  print("%s %s Level solution: %s" % (level.ljust(10), initial_state.ljust(10), solution))
