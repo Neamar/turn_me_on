@@ -37,6 +37,10 @@ class _LevelState extends State<Level> {
   static const MaterialColor COLOR_FAIL = Colors.red;
   static const MaterialColor COLOR_SUCCESS = Colors.green;
 
+  static const STATE_PLAYING = 'playing';
+  static const STATE_FAILED = 'failed';
+  static const STATE_WON = 'won';
+
   static const String TOGGLE = 'T';
   static const String SWITCH_ALL = '∀';
   static const String SWITCH_AROUND = '↕';
@@ -49,10 +53,12 @@ class _LevelState extends State<Level> {
 
   int _remainingMoves;
   String _currentState;
+  String gameState;
 
   _LevelState(this.toggles, this._initialState, this._initialMoves) {
     this._currentState = _initialState;
     this._remainingMoves = _initialMoves;
+    gameState = STATE_PLAYING;
   }
 
   String _switch(String toggleState) {
@@ -86,6 +92,14 @@ class _LevelState extends State<Level> {
         }
       }
       _currentState = newState;
+
+      bool hasWon = !_currentState.contains("0");
+      if(hasWon) {
+        gameState = STATE_WON;
+      }
+      else if(_remainingMoves == 0) {
+        gameState = STATE_FAILED;
+      }
     });
   }
 
@@ -93,6 +107,7 @@ class _LevelState extends State<Level> {
     setState(() {
       _currentState = _initialState;
       _remainingMoves = _initialMoves;
+      gameState = STATE_PLAYING;
     });
   }
 
@@ -126,14 +141,18 @@ class _LevelState extends State<Level> {
 
   @override
   Widget build(BuildContext context) {
+    MaterialColor headerColor = COLOR_GAME;
     String textToDisplay = "moves remaining";
     if (_remainingMoves == 1) {
       textToDisplay = "move remaining";
-    } else if (_remainingMoves == 0) {
-      textToDisplay = "You've lost :(";
+    } else if (gameState == STATE_FAILED) {
+      textToDisplay = "No moves remaining";
+      headerColor = COLOR_FAIL;
     }
-
-    MaterialColor headerColor = _remainingMoves == 0 ? COLOR_FAIL : COLOR_GAME;
+    else if (gameState == STATE_WON) {
+      headerColor = COLOR_SUCCESS;
+      textToDisplay = "You won!";
+    }
 
     return Column(children: <Widget>[
       Material(
@@ -180,7 +199,7 @@ class _LevelState extends State<Level> {
                         fontSize: 20.0, // insert your font size here
                         color: Colors.deepPurple),
                   ),
-                  onChanged: _remainingMoves == 0
+                  onChanged: gameState != STATE_PLAYING
                       ? null
                       : (bool value) {
                           _pressToggle(index);
