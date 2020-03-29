@@ -64,39 +64,49 @@ class _LevelState extends State<Level> {
       if (toggleType == TOGGLE) {
         newState = _switchToggleInState(toggleIndex, newState);
       } else if (toggleType == SWITCH_ALL) {
-        for(int i = 0; i < _currentState.length; i++) {
+        for (int i = 0; i < _currentState.length; i++) {
           newState = _switchToggleInState(i, newState);
         }
-      }
-      else if(toggleType == SWITCH_AROUND) {
-        if(toggleIndex > 0) {
+      } else if (toggleType == SWITCH_AROUND) {
+        if (toggleIndex > 0) {
           newState = _switchToggleInState(toggleIndex - 1, newState);
         }
         newState = _switchToggleInState(toggleIndex, newState);
-        if(toggleIndex < toggles.length - 1) {
-          newState = _switchToggleInState(toggleIndex + 1,newState);
+        if (toggleIndex < toggles.length - 1) {
+          newState = _switchToggleInState(toggleIndex + 1, newState);
         }
       }
       print("New States is " + newState);
       _currentState = newState;
     });
   }
-  
+
   String getTitle(String toggleType) {
-    if(toggleType == TOGGLE) {
+    if (toggleType == TOGGLE) {
       return 'A simple switch';
-    }
-    else if(toggleType == SWITCH_ALL) {
+    } else if (toggleType == SWITCH_ALL) {
       return 'Toggle all switches';
-    }
-    else if(toggleType == SWITCH_AROUND) {
+    } else if (toggleType == SWITCH_AROUND) {
       return 'Toggle me and both switches around me';
-    }
-    else if(toggleType == SWITCH_EXTREMES) {
+    } else if (toggleType == SWITCH_EXTREMES) {
       return 'Toggle me, and the first and last switches';
     }
 
     return 'An unknown toggle';
+  }
+
+  String getSecondaryTitle(String toggleType) {
+    if (toggleType == TOGGLE) {
+      return ' ';
+    } else if (toggleType == SWITCH_ALL) {
+      return SWITCH_ALL;
+    } else if (toggleType == SWITCH_AROUND) {
+      return SWITCH_AROUND;
+    } else if (toggleType == SWITCH_EXTREMES) {
+      return SWITCH_EXTREMES;
+    }
+
+    return '?';
   }
 
   @override
@@ -111,6 +121,13 @@ class _LevelState extends State<Level> {
               _pressToggle(index);
             },
             value: _currentState[index] == "1",
+            secondary: Text(
+              getSecondaryTitle(toggles[index]),
+              style: TextStyle(
+                fontSize: 20.0, // insert your font size here
+                color: Colors.deepPurple
+              ),
+            ),
           );
         });
   }
