@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text("Turn me on"),
         ),
-        body: Level(toggles: 'TTTT', initialState: '0010'),
+        body: Level(toggles: '∀TT∀', initialState: '0110'),
       ),
     );
   }
@@ -52,7 +52,9 @@ class _LevelState extends State<Level> {
   }
 
   String _switchToggleInState(int toggleIndex, String state) {
-    return state.substring(0, toggleIndex) + _switch(state[toggleIndex]) + state.substring(toggleIndex + 1);
+    return state.substring(0, toggleIndex) +
+        _switch(state[toggleIndex]) +
+        state.substring(toggleIndex + 1);
   }
 
   void _pressToggle(int toggleIndex) {
@@ -61,11 +63,31 @@ class _LevelState extends State<Level> {
       String toggleType = toggles[toggleIndex];
       if (toggleType == TOGGLE) {
         newState = _switchToggleInState(toggleIndex, newState);
+      } else if (toggleType == SWITCH_ALL) {
+        for(int i = 0; i < _currentState.length; i++) {
+          newState = _switchToggleInState(i, newState);
+        }
       }
-
       print("New States is " + newState);
       _currentState = newState;
     });
+  }
+  
+  String getTitle(String toggleType) {
+    if(toggleType == TOGGLE) {
+      return 'A simple switch';
+    }
+    else if(toggleType == SWITCH_ALL) {
+      return 'Toggle all switches';
+    }
+    else if(toggleType == SWITCH_AROUND) {
+      return 'Toggle me and both switches around me';
+    }
+    else if(toggleType == SWITCH_EXTREMES) {
+      return 'Toggle me, and the first and last switches';
+    }
+
+    return 'An unknown toggle';
   }
 
   @override
@@ -74,7 +96,7 @@ class _LevelState extends State<Level> {
         itemCount: _currentState.length,
         itemBuilder: (BuildContext context, int index) {
           return SwitchListTile(
-            title: const Text('Toggle me'),
+            title: Text(getTitle(toggles[index])),
             onChanged: (bool value) {
               print("A toggle was pressed");
               _pressToggle(index);
