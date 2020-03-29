@@ -13,13 +13,16 @@ def fuzz_level(level):
       solution = solve_level(level, initial_state)
     except:
       continue
-    if len(solution) > longest_solution_size:
+    if len(solution) > longest_solution_size and len(solution) != len(level):
       longest_solution_size = len(solution)
       best_option = (initial_state, solution)
   return best_option
 
 
-for potential_level_arr in product(["T", "∀", "↕"], repeat=5):
+for potential_level_arr in product(["T", "N", "∀", "↕", "C"], repeat=7):
+  if potential_level_arr[0] == "C" or potential_level_arr[-1] == "C":
+    continue
+
   potential_level = ''.join(potential_level_arr)
   initial_state, solution = fuzz_level(potential_level)
   print('%s Best option is initial_state %s, actions : %s (%s)' % (potential_level, initial_state, solution, len(solution)))

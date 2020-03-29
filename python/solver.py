@@ -2,6 +2,7 @@ TOGGLE = 'T'
 SWITCH_ALL = '∀'
 SWITCH_AROUND = '↕'
 SWITCH_EXTREMES = 'C'
+SWITCH_NTH = 'N'
 
 
 def switch(toggle_state):
@@ -32,8 +33,20 @@ def press_switch(toggle_index, level, state):
     if toggle_index < len(state) - 1:
       switch_toggle(toggle_index + 1, new_state)
     return new_state
-  else:
-    raise Exception("Unknown toggle type: %s in %s" % (toggle_type, level))
+  elif toggle_type == SWITCH_EXTREMES:
+    new_state = state[:]
+    switch_toggle(toggle_index, new_state)
+    switch_toggle(0, new_state)
+    switch_toggle(len(state) - 1, new_state)
+    return new_state
+  elif toggle_type == SWITCH_NTH:
+    new_state = state[:]
+    enabled_count = new_state.count("1")
+    switch_toggle(toggle_index, new_state)
+    switch_toggle(enabled_count, new_state)
+    return new_state
+
+  raise Exception("Unknown toggle type: %s in %s" % (toggle_type, level))
 
 
 def explore(level, state):
