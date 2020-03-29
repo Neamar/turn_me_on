@@ -48,13 +48,13 @@ def explore(level, state):
   return reachable_states
 
 
-def solve_level(level, intial_state):
+def solve_level(level, initial_state):
   """
   Find a way to solve specified level, or raise an Exception if problem has no solution
   """
   queue = []
-  queue.append((intial_state, ''))
-  known_states = set(intial_state)
+  queue.append((initial_state, ''))
+  known_states = set(initial_state)
 
   # Breadth first search algorithm, searching for a state of 111111
   while True:

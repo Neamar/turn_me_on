@@ -7,7 +7,7 @@ levels = (
   ('T↕TT∀T', '111001'),
   ('∀↕↕T', '1001'),
   ('T↕↕↕T', '10001'),
-  ('T↕↕↕T', '10001'),
+  ('T↕TT∀T', '010101')
 )
 
 for index, (level, initial_state) in enumerate(levels):
