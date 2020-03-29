@@ -1,5 +1,6 @@
 from itertools import product
 from solver import solve_level
+from random import random
 
 def fuzz_level(level):
   longest_solution_size = 0
@@ -15,10 +16,10 @@ def fuzz_level(level):
     if len(solution) > longest_solution_size:
       longest_solution_size = len(solution)
       best_option = (initial_state, solution)
-
   return best_option
 
 
-level = 'T↕TT∀T'
-initial_state, solution = fuzz_level(level)
-print('Best option is initial_state %s, actions : %s (%s)' % (initial_state, solution, len(solution)))
+for potential_level_arr in product(["T", "∀", "↕"], repeat=5):
+  potential_level = ''.join(potential_level_arr)
+  initial_state, solution = fuzz_level(potential_level)
+  print('%s Best option is initial_state %s, actions : %s (%s)' % (potential_level, initial_state, solution, len(solution)))
