@@ -136,8 +136,8 @@ class _LevelState extends State<Level> {
     MaterialColor headerColor = _remainingMoves == 0 ? COLOR_FAIL : COLOR_GAME;
 
     return Column(children: <Widget>[
-      Container(
-        decoration: new BoxDecoration(color: headerColor[300]),
+      Material(
+        color: headerColor[300],
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(children: <Widget>[
@@ -147,14 +147,12 @@ class _LevelState extends State<Level> {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: _remainingMoves == 0
-                        ? null
-                        : Text(
-                            _remainingMoves.toString(),
-                            style: TextStyle(
-                                fontSize: 50.0, // insert your font size here
-                                color: headerColor[900]),
-                          ),
+                    child: Text(
+                      _remainingMoves > 0 ? _remainingMoves.toString() : '',
+                      style: TextStyle(
+                          fontSize: 50.0, // insert your font size here
+                          color: headerColor[900]),
+                    ),
                   ),
                   Text(textToDisplay),
                 ],
@@ -164,7 +162,6 @@ class _LevelState extends State<Level> {
               icon: Icon(Icons.refresh,
                   color: headerColor[900], semanticLabel: 'Restart level'),
               onPressed: _reset,
-              highlightColor: Colors.pink,
               iconSize: 50,
             ),
           ]),
