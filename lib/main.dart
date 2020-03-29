@@ -15,23 +15,28 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text("Turn me on"),
         ),
-        body: Level('T↕TT∀T', '111001'),
+        body: Level('T↕TT∀T', '111001', 3),
       ),
     );
   }
 }
 
 class Level extends StatefulWidget {
-  Level(this.toggles, this.initialState);
+  Level(this.toggles, this.initialState, this.allowedMoves);
 
   final String toggles;
   final String initialState;
+  final int allowedMoves;
 
   @override
-  _LevelState createState() => _LevelState(toggles, initialState);
+  _LevelState createState() => _LevelState(toggles, initialState, allowedMoves);
 }
 
 class _LevelState extends State<Level> {
+  static const MaterialColor COLOR_GAME = Colors.deepPurple;
+  static const MaterialColor COLOR_FAIL = Colors.red;
+  static const MaterialColor COLOR_SUCCESS = Colors.green;
+
   static const String TOGGLE = 'T';
   static const String SWITCH_ALL = '∀';
   static const String SWITCH_AROUND = '↕';
@@ -39,12 +44,15 @@ class _LevelState extends State<Level> {
   static const String SWITCH_NTH = 'N';
 
   final String toggles;
-  String _currentState;
-  String _initialState;
+  final int _initialMoves;
+  final String _initialState;
 
-  _LevelState(String this.toggles, String initialState) {
-    this._currentState = initialState;
-    this._initialState = initialState;
+  int _remainingMoves;
+  String _currentState;
+
+  _LevelState(this.toggles, this._initialState, this._initialMoves) {
+    this._currentState = _initialState;
+    this._remainingMoves = _initialMoves;
   }
 
   String _switch(String toggleState) {
@@ -59,6 +67,7 @@ class _LevelState extends State<Level> {
 
   void _pressToggle(int toggleIndex) {
     setState(() {
+      _remainingMoves--;
       String newState = _currentState;
       String toggleType = toggles[toggleIndex];
       if (toggleType == TOGGLE) {
@@ -76,12 +85,18 @@ class _LevelState extends State<Level> {
           newState = _switchToggleInState(toggleIndex + 1, newState);
         }
       }
-      print("New States is " + newState);
       _currentState = newState;
     });
   }
 
-  String getTitle(String toggleType) {
+  void _reset() {
+    setState(() {
+      _currentState = _initialState;
+      _remainingMoves = _initialMoves;
+    });
+  }
+
+  String _getTitle(String toggleType) {
     if (toggleType == TOGGLE) {
       return 'A simple switch';
     } else if (toggleType == SWITCH_ALL) {
@@ -95,7 +110,7 @@ class _LevelState extends State<Level> {
     return 'An unknown toggle';
   }
 
-  String getSecondaryTitle(String toggleType) {
+  String _getSecondaryTitle(String toggleType) {
     if (toggleType == TOGGLE) {
       return ' ';
     } else if (toggleType == SWITCH_ALL) {
@@ -111,24 +126,70 @@ class _LevelState extends State<Level> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: _currentState.length,
-        itemBuilder: (BuildContext context, int index) {
-          return SwitchListTile(
-            title: Text(getTitle(toggles[index])),
-            onChanged: (bool value) {
-              print("A toggle was pressed");
-              _pressToggle(index);
-            },
-            value: _currentState[index] == "1",
-            secondary: Text(
-              getSecondaryTitle(toggles[index]),
-              style: TextStyle(
-                fontSize: 20.0, // insert your font size here
-                color: Colors.deepPurple
+    String textToDisplay = "moves remaining";
+    if (_remainingMoves == 1) {
+      textToDisplay = "move remaining";
+    } else if (_remainingMoves == 0) {
+      textToDisplay = "You've lost :(";
+    }
+
+    MaterialColor headerColor = _remainingMoves == 0 ? COLOR_FAIL : COLOR_GAME;
+
+    return Column(children: <Widget>[
+      Container(
+        decoration: new BoxDecoration(color: headerColor[300]),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(children: <Widget>[
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: _remainingMoves == 0
+                        ? null
+                        : Text(
+                            _remainingMoves.toString(),
+                            style: TextStyle(
+                                fontSize: 50.0, // insert your font size here
+                                color: headerColor[900]),
+                          ),
+                  ),
+                  Text(textToDisplay),
+                ],
               ),
             ),
-          );
-        });
+            IconButton(
+              icon: Icon(Icons.refresh,
+                  color: headerColor[900], semanticLabel: 'Restart level'),
+              onPressed: _reset,
+              highlightColor: Colors.pink,
+              iconSize: 50,
+            ),
+          ]),
+        ),
+      ),
+      Expanded(
+          child: ListView.builder(
+              itemCount: _currentState.length,
+              itemBuilder: (BuildContext context, int index) {
+                return SwitchListTile(
+                  title: Text(_getTitle(toggles[index])),
+                  value: _currentState[index] == "1",
+                  secondary: Text(
+                    _getSecondaryTitle(toggles[index]),
+                    style: TextStyle(
+                        fontSize: 20.0, // insert your font size here
+                        color: Colors.deepPurple),
+                  ),
+                  onChanged: _remainingMoves == 0
+                      ? null
+                      : (bool value) {
+                          _pressToggle(index);
+                        },
+                );
+              }))
+    ]);
   }
 }
