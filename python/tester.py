@@ -8,16 +8,6 @@ def switch_toggle(toggle_state):
   return '0' if toggle_state == '1' else '1'
 
 
-def switch_state(toggle_index, state):
-  """
-  Switch one toggle at specified index
-  """
-  current_value = state[toggle_index]
-  new_state = state[:]
-  new_state[toggle_index] = switch_toggle(current_value)
-  return new_state
-
-
 def press_switch(toggle_index, level, state):
   """
   Switch the toggle at toggle_index, apply the changes, return the new state
@@ -25,9 +15,19 @@ def press_switch(toggle_index, level, state):
   toggle_type = level[toggle_index]
 
   if toggle_type == TOGGLE:
-    return switch_state(toggle_index, state)
+    new_state = state[:]
+    new_state[toggle_index] = switch_toggle(new_state[toggle_index])
+    return new_state
   elif toggle_type == SWITCH_ALL:
     return [switch_toggle(s) for s in state]
+  elif toggle_type == SWITCH_AROUND:
+    new_state = state[:]
+    if toggle_index > 0:
+      new_state[toggle_index - 1] = switch_toggle(new_state[toggle_index - 1])
+    new_state[toggle_index] = switch_toggle(new_state[toggle_index])
+    if toggle_index < len(state) - 1:
+      new_state[toggle_index + 1] = switch_toggle(new_state[toggle_index + 1])
+    return new_state
   else:
     raise Exception("Unknown toggle type: %s in %s" % (toggle_type, level))
 
@@ -74,6 +74,7 @@ def solve_level(level, intial_state):
 levels = (
   ('T', '0'),
   ('TTT∀', '0000'),
+  ('T↕TT↕T', '000000'),
 )
 
 for level, initial_state in levels:
