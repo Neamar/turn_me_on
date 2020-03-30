@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import 'model.dart';
@@ -116,15 +118,22 @@ class _LevelState extends State<Level> {
     } else if (toggleType == SWITCH_EXTREMES) {
       return 'Toggle me, and the first and last switches';
     } else if(toggleType == SWITCH_NTH) {
-      return 'Toggle me and the n-th toggle (n is the number of active toggles)';
+      return 'Toggle me and the n-th toggle';
     }
 
     return 'An unknown toggle';
   }
 
+  Text getSubtitle(String toggleType) {
+    if(toggleType == SWITCH_NTH) {
+      return Text("(n is the number of active toggles)");
+    }
+    return null;
+  }
+
   String _getSecondaryTitle(String toggleType) {
     if (toggleType == TOGGLE) {
-      return ' ';
+      return '·';
     } else if (toggleType == SWITCH_ALL) {
       return SWITCH_ALL;
     } else if (toggleType == SWITCH_AROUND) {
@@ -151,6 +160,9 @@ class _LevelState extends State<Level> {
       headerColor = COLOR_SUCCESS;
       textToDisplay = "You won!";
     }
+
+    bool hasAtLeastOneSwitchNth = toggles.contains(SWITCH_NTH);
+    int enabledCount = "1".allMatches(_currentState).length;
 
     return Column(children: <Widget>[
       Material(
@@ -201,12 +213,13 @@ class _LevelState extends State<Level> {
               itemBuilder: (BuildContext context, int index) {
                 return SwitchListTile(
                   title: Text(_getTitle(toggles[index])),
+                  subtitle: getSubtitle(toggles[index]),
                   value: _currentState[index] == "1",
                   secondary: Text(
                     _getSecondaryTitle(toggles[index]),
                     style: TextStyle(
                         fontSize: 20.0, // insert your font size here
-                        color: Colors.deepPurple),
+                        color: hasAtLeastOneSwitchNth && enabledCount == index ? Colors.deepPurple[900] : Colors.deepPurple[200]),
                   ),
                   onChanged: gameState != STATE_PLAYING
                       ? null
