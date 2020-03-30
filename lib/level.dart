@@ -77,7 +77,7 @@ class _LevelState extends State<Level> {
       bool hasWon = !_currentState.contains("0");
       if(hasWon) {
         gameState = STATE_WON;
-
+        onWinCallback();
       }
       else if(_remainingMoves == 0) {
         gameState = STATE_FAILED;

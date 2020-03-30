@@ -28,33 +28,16 @@ class MyApp extends StatelessWidget {
                   return Center(child: CircularProgressIndicator());
                 }
 
-                return LevelStore.getLevel(model.lastUnlockedLevel, () {
-                  model.unlockNextLevel();
+                return LevelStore.getLevel(model.currentlyPlayingLevel, () {
+                  if(model.currentlyPlayingLevel == model.lastUnlockedLevel) {
+                    // GG! You unlocked the next level
+                    print("Unlock next level");
+                    model.unlockNextLevel();
+                  }
                 });
               },
             )),
       ),
     );
   }
-}
-
-class LevelWrapper extends StatefulWidget {
-  final int lastUnlockedWidget;
-  LevelWrapper(this.lastUnlockedWidget);
-
-  @override
-  _LevelWrapperState createState() => _LevelWrapperState(lastUnlockedWidget);
-}
-
-
-class _LevelWrapperState extends State<LevelWrapper> {
-  final int lastUnlockedWidget;
-    
-  _LevelWrapperState();
-
-  @override
-  Widget build(BuildContext context) {
-  }
-
-
 }

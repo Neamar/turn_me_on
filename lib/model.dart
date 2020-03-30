@@ -10,6 +10,7 @@ class UnlockedLevelsModel extends ChangeNotifier {
 
   bool isLoading = true;
   int lastUnlockedLevel = -1;
+  int currentlyPlayingLevel = -1;
 
   Future<int> readStateFromDisk() async {
     _prefs = await SharedPreferences.getInstance();
@@ -28,7 +29,8 @@ class UnlockedLevelsModel extends ChangeNotifier {
     readStateFromDisk().then((lastUnlockedLevel) {
       this.isLoading = false;
       this.lastUnlockedLevel = lastUnlockedLevel;
-      print("Level loaded");
+      this.currentlyPlayingLevel = lastUnlockedLevel;
+      print("Model loaded");
       this.notifyListeners();
     }).catchError((error) {
       print(error.toString());
