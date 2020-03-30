@@ -28,13 +28,7 @@ class MyApp extends StatelessWidget {
                   return Center(child: CircularProgressIndicator());
                 }
 
-                return LevelStore.getLevel(model.currentlyPlayingLevel, () {
-                  if(model.currentlyPlayingLevel == model.lastUnlockedLevel) {
-                    // GG! You unlocked the next level
-                    print("Unlock next level");
-                    model.unlockNextLevel();
-                  }
-                });
+                return LevelStore.getLevel(model.currentlyPlayingLevel, model);
               },
             )),
       ),

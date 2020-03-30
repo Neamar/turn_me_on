@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
+
 import 'level.dart';
+import 'model.dart';
 
 class LevelData {
   final String toggles;
@@ -15,9 +18,9 @@ class LevelStore {
     LevelData('∀TT∀', '0110', 3),
     LevelData('T∀TT', '1011', 4),
     LevelData('T↕TT↕T', '000000', 2),
+    LevelData('T↕↕↕T', '10001', 1),
     LevelData('T↕TT∀T', '111001', 3),
     LevelData('∀↕↕T', '1001', 2),
-    LevelData('T↕↕↕T', '10001', 1),
     LevelData('↕∀↕T∀', '10100', 4),
     LevelData('T↕TT∀T', '010101', 6),
     LevelData('TCT', '000', 1),
@@ -33,8 +36,9 @@ class LevelStore {
     LevelData('T∀N∀∀∀', '001110', 11),
   ];
 
-  static Level getLevel(int levelNumber, Function winCallback) {
+  static Level getLevel(int levelNumber, UnlockedLevelsModel model) {
     LevelData data = levels[levelNumber];
-    return Level(data.toggles, data.initialState, data.maxMoves, winCallback);
+    Key key = ValueKey(data.toggles + data.initialState);
+    return Level(key, data.toggles, data.initialState, data.maxMoves, model);
   }
 }

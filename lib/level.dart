@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 
+import 'model.dart';
+
 class Level extends StatefulWidget {
   final String toggles;
   final String initialState;
   final int allowedMoves;
-  final Function onWinCallback;
+  final UnlockedLevelsModel model;
 
-  Level(this.toggles, this.initialState, this.allowedMoves, this.onWinCallback);
+  Level(Key key, this.toggles, this.initialState, this.allowedMoves, this.model) : super(key: key);
 
   @override
-  _LevelState createState() => _LevelState(toggles, initialState, allowedMoves, onWinCallback);
+  _LevelState createState() =>
+      _LevelState(toggles, initialState, allowedMoves, model);
 }
 
 class _LevelState extends State<Level> {
@@ -30,13 +33,14 @@ class _LevelState extends State<Level> {
   final String toggles;
   final int _initialMoves;
   final String _initialState;
-  final Function onWinCallback;
+  final UnlockedLevelsModel model;
 
   int _remainingMoves;
   String _currentState;
   String gameState;
 
-  _LevelState(this.toggles, this._initialState, this._initialMoves, this.onWinCallback) {
+  _LevelState(this.toggles, this._initialState, this._initialMoves,
+      this.model) {
     this._currentState = _initialState;
     this._remainingMoves = _initialMoves;
     gameState = STATE_PLAYING;
@@ -75,11 +79,10 @@ class _LevelState extends State<Level> {
       _currentState = newState;
 
       bool hasWon = !_currentState.contains("0");
-      if(hasWon) {
+      if (hasWon) {
         gameState = STATE_WON;
-        onWinCallback();
-      }
-      else if(_remainingMoves == 0) {
+        model.notifyCurrentLevelWon();
+      } else if (_remainingMoves == 0) {
         gameState = STATE_FAILED;
       }
     });
@@ -130,8 +133,7 @@ class _LevelState extends State<Level> {
     } else if (gameState == STATE_FAILED) {
       textToDisplay = "No moves remaining";
       headerColor = COLOR_FAIL;
-    }
-    else if (gameState == STATE_WON) {
+    } else if (gameState == STATE_WON) {
       headerColor = COLOR_SUCCESS;
       textToDisplay = "You won!";
     }
@@ -159,12 +161,23 @@ class _LevelState extends State<Level> {
                 ],
               ),
             ),
-            IconButton(
-              icon: Icon(Icons.refresh,
-                  color: headerColor[900], semanticLabel: 'Restart level'),
-              onPressed: _reset,
-              iconSize: 50,
-            ),
+            gameState == STATE_WON
+                ? IconButton(
+                    icon: Icon(Icons.navigate_next,
+                        color: headerColor[900],
+                        semanticLabel: 'Move to next level'),
+                    onPressed: () {
+                      model.moveToNextLevel();
+                    },
+                    iconSize: 50,
+                  )
+                : IconButton(
+                    icon: Icon(Icons.refresh,
+                        color: headerColor[900],
+                        semanticLabel: 'Restart level'),
+                    onPressed: _reset,
+                    iconSize: 50,
+                  ),
           ]),
         ),
       ),
@@ -184,8 +197,8 @@ class _LevelState extends State<Level> {
                   onChanged: gameState != STATE_PLAYING
                       ? null
                       : (bool value) {
-                    _pressToggle(index);
-                  },
+                          _pressToggle(index);
+                        },
                 );
               }))
     ]);
