@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
 class Level extends StatefulWidget {
-  Level(this.toggles, this.initialState, this.allowedMoves);
-
   final String toggles;
   final String initialState;
   final int allowedMoves;
+  final Function onWinCallback;
+
+  Level(this.toggles, this.initialState, this.allowedMoves, this.onWinCallback);
 
   @override
-  _LevelState createState() => _LevelState(toggles, initialState, allowedMoves);
+  _LevelState createState() => _LevelState(toggles, initialState, allowedMoves, onWinCallback);
 }
 
 class _LevelState extends State<Level> {
@@ -29,12 +30,13 @@ class _LevelState extends State<Level> {
   final String toggles;
   final int _initialMoves;
   final String _initialState;
+  final Function onWinCallback;
 
   int _remainingMoves;
   String _currentState;
   String gameState;
 
-  _LevelState(this.toggles, this._initialState, this._initialMoves) {
+  _LevelState(this.toggles, this._initialState, this._initialMoves, this.onWinCallback) {
     this._currentState = _initialState;
     this._remainingMoves = _initialMoves;
     gameState = STATE_PLAYING;
@@ -75,6 +77,7 @@ class _LevelState extends State<Level> {
       bool hasWon = !_currentState.contains("0");
       if(hasWon) {
         gameState = STATE_WON;
+
       }
       else if(_remainingMoves == 0) {
         gameState = STATE_FAILED;

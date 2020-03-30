@@ -33,8 +33,8 @@ class LevelStore {
     LevelData('T∀N∀∀∀', '001110', 11),
   ];
 
-  static Level getLevel(int levelNumber) {
+  static Level getLevel(int levelNumber, Function winCallback) {
     LevelData data = levels[levelNumber];
-    return Level(data.toggles, data.initialState, data.maxMoves);
+    return Level(data.toggles, data.initialState, data.maxMoves, winCallback);
   }
 }

@@ -41,4 +41,8 @@ class UnlockedLevelsModel extends ChangeNotifier {
     super.notifyListeners();
   }
 
+  unlockNextLevel() {
+    lastUnlockedLevel++;
+    notifyListeners();
+  }
 }
