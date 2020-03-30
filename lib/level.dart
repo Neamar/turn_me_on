@@ -81,6 +81,11 @@ class _LevelState extends State<Level> {
         newState = _switchToggleInState(toggleIndex, newState);
         newState = _switchToggleInState(toggles.length - 1, newState);
       }
+      else if(toggleType == SWITCH_NTH) {
+        int enabledCount = "1".allMatches(_currentState).length;
+        newState = _switchToggleInState(toggleIndex, newState);
+        newState = _switchToggleInState(enabledCount, newState);
+      }
       _currentState = newState;
 
       bool hasWon = !_currentState.contains("0");
@@ -110,6 +115,8 @@ class _LevelState extends State<Level> {
       return 'Toggle me and both switches around me';
     } else if (toggleType == SWITCH_EXTREMES) {
       return 'Toggle me, and the first and last switches';
+    } else if(toggleType == SWITCH_NTH) {
+      return 'Toggle me and the n-th toggle (n is the number of active toggles)';
     }
 
     return 'An unknown toggle';
