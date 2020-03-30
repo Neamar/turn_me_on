@@ -215,11 +215,15 @@ class _LevelState extends State<Level> {
                   title: Text(_getTitle(toggles[index])),
                   subtitle: getSubtitle(toggles[index]),
                   value: _currentState[index] == "1",
-                  secondary: Text(
-                    _getSecondaryTitle(toggles[index]),
-                    style: TextStyle(
-                        fontSize: 20.0, // insert your font size here
-                        color: hasAtLeastOneSwitchNth && enabledCount == index ? Colors.deepPurple[900] : Colors.deepPurple[200]),
+                  secondary: Container(
+                    constraints: BoxConstraints(minWidth: 40, maxWidth: 40),
+                    child: Text(
+                      _getSecondaryTitle(toggles[index]),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 20.0, // insert your font size here
+                          color: hasAtLeastOneSwitchNth && enabledCount == index ? Colors.deepPurple[900] : Colors.deepPurple[200]),
+                    ),
                   ),
                   onChanged: gameState != STATE_PLAYING
                       ? null
