@@ -18,19 +18,49 @@ class MyApp extends StatelessWidget {
       home: ChangeNotifierProvider<UnlockedLevelsModel>(
         create: (context) => UnlockedLevelsModel(),
         child: Scaffold(
-            appBar: AppBar(
-              title: Text("Turn me on"),
-            ),
-            body: Consumer<UnlockedLevelsModel>(
-              builder: (context, model, child) {
-                if (model.isLoading) {
-                  // SharedPreferences are not ready yet
-                  return Center(child: CircularProgressIndicator());
-                }
-
-                return LevelStore.getLevel(model.currentlyPlayingLevel, model);
-              },
-            )),
+          appBar: AppBar(
+            title: Text("Turn me on"),
+          ),
+          body: Consumer<UnlockedLevelsModel>(
+            builder: (context, model, child) {
+              if (model.isLoading) {
+                // SharedPreferences are not ready yet
+                return Center(child: CircularProgressIndicator());
+              }
+              return LevelStore.getLevel(model.currentlyPlayingLevel, model);
+            },
+          ),
+          bottomNavigationBar: Consumer<UnlockedLevelsModel>(
+            builder: (context, model, child) {
+              return BottomNavigationBar(
+                items: <BottomNavigationBarItem>[
+                  if(model.canMoveToPreviousLevel()) BottomNavigationBarItem(
+                    icon: Icon(Icons.navigate_before),
+                    title: Text('Previous level'),
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.home),
+                    title: Text('Level #' + (model.currentlyPlayingLevel + 1).toString()),
+                  ),
+                  if(model.canMoveToNextLevel()) BottomNavigationBarItem(
+                    icon: Icon(Icons.navigate_next),
+                    title: Text('Next level'),
+                  ),
+                ],
+                currentIndex: 1,
+                selectedItemColor: Colors.purple[800],
+                onTap: (int index) {
+                  if(index == 0 && model.canMoveToPreviousLevel()) {
+                    model.moveToPreviousLevel();
+                  }
+                  if(((index == 1 && !model.canMoveToPreviousLevel()) || (index == 2)) && model.canMoveToNextLevel()) {
+                    model.moveToNextLevel();
+                  }
+                },
+              );
+            },
+          ),
+        ),
       ),
     );
   }

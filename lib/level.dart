@@ -8,7 +8,8 @@ class Level extends StatefulWidget {
   final int allowedMoves;
   final UnlockedLevelsModel model;
 
-  Level(Key key, this.toggles, this.initialState, this.allowedMoves, this.model) : super(key: key);
+  Level(Key key, this.toggles, this.initialState, this.allowedMoves, this.model)
+      : super(key: key);
 
   @override
   _LevelState createState() =>
@@ -39,8 +40,8 @@ class _LevelState extends State<Level> {
   String _currentState;
   String gameState;
 
-  _LevelState(this.toggles, this._initialState, this._initialMoves,
-      this.model) {
+  _LevelState(
+      this.toggles, this._initialState, this._initialMoves, this.model) {
     this._currentState = _initialState;
     this._remainingMoves = _initialMoves;
     gameState = STATE_PLAYING;
@@ -161,23 +162,23 @@ class _LevelState extends State<Level> {
                 ],
               ),
             ),
-            gameState == STATE_WON
-                ? IconButton(
-                    icon: Icon(Icons.navigate_next,
-                        color: headerColor[900],
-                        semanticLabel: 'Move to next level'),
-                    onPressed: () {
-                      model.moveToNextLevel();
-                    },
-                    iconSize: 50,
-                  )
-                : IconButton(
-                    icon: Icon(Icons.refresh,
-                        color: headerColor[900],
-                        semanticLabel: 'Restart level'),
-                    onPressed: _reset,
-                    iconSize: 50,
-                  ),
+            if (gameState == STATE_WON && model.canMoveToNextLevel())
+              IconButton(
+                icon: Icon(Icons.navigate_next,
+                    color: headerColor[900],
+                    semanticLabel: 'Move to next level'),
+                onPressed: () {
+                  model.moveToNextLevel();
+                },
+                iconSize: 50,
+              ),
+            if (gameState != STATE_WON)
+              IconButton(
+                icon: Icon(Icons.refresh,
+                    color: headerColor[900], semanticLabel: 'Restart level'),
+                onPressed: _reset,
+                iconSize: 50,
+              ),
           ]),
         ),
       ),

@@ -47,16 +47,27 @@ class UnlockedLevelsModel extends ChangeNotifier {
   }
 
   bool canMoveToNextLevel() {
-      return currentlyPlayingLevel < lastUnlockedLevel;
+      return !isLoading && currentlyPlayingLevel < lastUnlockedLevel;
   }
 
   void moveToNextLevel() {
-    print("Levels " + currentlyPlayingLevel.toString() + " unlocked:" + lastUnlockedLevel.toString());
     if(canMoveToNextLevel()) {
       currentlyPlayingLevel++;
       notifyListeners();
     }
   }
+
+  bool canMoveToPreviousLevel() {
+    return !isLoading && currentlyPlayingLevel > 0;
+  }
+
+  void moveToPreviousLevel() {
+    if(canMoveToPreviousLevel()) {
+      currentlyPlayingLevel--;
+      notifyListeners();
+    }
+  }
+
 
   @override
   void notifyListeners() {
