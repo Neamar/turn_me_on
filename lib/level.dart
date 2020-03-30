@@ -76,6 +76,10 @@ class _LevelState extends State<Level> {
         if (toggleIndex < toggles.length - 1) {
           newState = _switchToggleInState(toggleIndex + 1, newState);
         }
+      } else if(toggleType == SWITCH_EXTREMES) {
+        newState = _switchToggleInState(0, newState);
+        newState = _switchToggleInState(toggleIndex, newState);
+        newState = _switchToggleInState(toggles.length - 1, newState);
       }
       _currentState = newState;
 
@@ -119,7 +123,9 @@ class _LevelState extends State<Level> {
     } else if (toggleType == SWITCH_AROUND) {
       return SWITCH_AROUND;
     } else if (toggleType == SWITCH_EXTREMES) {
-      return SWITCH_EXTREMES;
+      return 'Ω';
+    } else if(toggleType == SWITCH_NTH) {
+      return '∑';
     }
 
     return '?';

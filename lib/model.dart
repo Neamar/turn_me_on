@@ -38,6 +38,12 @@ class UnlockedLevelsModel extends ChangeNotifier {
     });
   }
 
+  void reset() {
+    currentlyPlayingLevel = 0;
+    lastUnlockedLevel = 0;
+    notifyListeners();
+  }
+
   void notifyCurrentLevelWon() {
     if (currentlyPlayingLevel == lastUnlockedLevel) {
       // GG! You unlocked the next level
