@@ -7,15 +7,17 @@ import 'model.dart';
 class Level extends StatefulWidget {
   final String toggles;
   final String initialState;
+  final String tutorial;
   final int allowedMoves;
   final UnlockedLevelsModel model;
 
-  Level(Key key, this.toggles, this.initialState, this.allowedMoves, this.model)
+  Level(Key key, this.toggles, this.initialState, this.allowedMoves,
+      this.tutorial, this.model)
       : super(key: key);
 
   @override
   _LevelState createState() =>
-      _LevelState(toggles, initialState, allowedMoves, model);
+      _LevelState(toggles, initialState, allowedMoves, tutorial, model);
 }
 
 class _LevelState extends State<Level> {
@@ -36,14 +38,15 @@ class _LevelState extends State<Level> {
   final String toggles;
   final int _initialMoves;
   final String _initialState;
+  final String tutorial;
   final UnlockedLevelsModel model;
 
   int _remainingMoves;
   String _currentState;
   String gameState;
 
-  _LevelState(
-      this.toggles, this._initialState, this._initialMoves, this.model) {
+  _LevelState(this.toggles, this._initialState, this._initialMoves,
+      this.tutorial, this.model) {
     this._currentState = _initialState;
     this._remainingMoves = _initialMoves;
     gameState = STATE_PLAYING;
@@ -78,12 +81,11 @@ class _LevelState extends State<Level> {
         if (toggleIndex < toggles.length - 1) {
           newState = _switchToggleInState(toggleIndex + 1, newState);
         }
-      } else if(toggleType == SWITCH_EXTREMES) {
+      } else if (toggleType == SWITCH_EXTREMES) {
         newState = _switchToggleInState(0, newState);
         newState = _switchToggleInState(toggleIndex, newState);
         newState = _switchToggleInState(toggles.length - 1, newState);
-      }
-      else if(toggleType == SWITCH_NTH) {
+      } else if (toggleType == SWITCH_NTH) {
         int enabledCount = "1".allMatches(_currentState).length;
         newState = _switchToggleInState(toggleIndex, newState);
         newState = _switchToggleInState(enabledCount, newState);
@@ -117,7 +119,7 @@ class _LevelState extends State<Level> {
       return 'Toggle me and both switches around me';
     } else if (toggleType == SWITCH_EXTREMES) {
       return 'Toggle me, and the first and last switches';
-    } else if(toggleType == SWITCH_NTH) {
+    } else if (toggleType == SWITCH_NTH) {
       return 'Toggle me and the n-th toggle';
     }
 
@@ -125,7 +127,7 @@ class _LevelState extends State<Level> {
   }
 
   Text getSubtitle(String toggleType) {
-    if(toggleType == SWITCH_NTH) {
+    if (toggleType == SWITCH_NTH) {
       return Text("(n is the number of active toggles)");
     }
     return null;
@@ -140,7 +142,7 @@ class _LevelState extends State<Level> {
       return SWITCH_AROUND;
     } else if (toggleType == SWITCH_EXTREMES) {
       return 'Ω';
-    } else if(toggleType == SWITCH_NTH) {
+    } else if (toggleType == SWITCH_NTH) {
       return '∑';
     }
 
@@ -207,6 +209,25 @@ class _LevelState extends State<Level> {
           ]),
         ),
       ),
+      if (tutorial != null)
+        Container(
+          padding: const EdgeInsets.all(16.0),
+          color: Colors.yellow[300],
+          child: Row(children: <Widget>[
+            Container(
+              padding: const EdgeInsets.only(right: 8),
+              child: Icon(
+                Icons.help_outline,
+                color: Colors.yellow[700],
+                size: 30.0,
+                semanticLabel: 'Help',
+              ),
+            ),
+            Flexible(
+              child: Text(tutorial),
+            )
+          ]),
+        ),
       Expanded(
           child: ListView.builder(
               itemCount: _currentState.length,
@@ -216,13 +237,16 @@ class _LevelState extends State<Level> {
                   subtitle: getSubtitle(toggles[index]),
                   value: _currentState[index] == "1",
                   secondary: Container(
-                    constraints: BoxConstraints(minWidth: 35, maxWidth: 35), // secondary min width is 35 and we want to center our icon
+                    constraints: BoxConstraints(minWidth: 35, maxWidth: 35),
+                    // secondary min width is 35 and we want to center our icon
                     child: Text(
                       _getSecondaryTitle(toggles[index]),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 20.0, // insert your font size here
-                          color: hasAtLeastOneSwitchNth && enabledCount == index ? Colors.deepPurple[900] : Colors.deepPurple[200]),
+                          color: hasAtLeastOneSwitchNth && enabledCount == index
+                              ? Colors.deepPurple[900]
+                              : Colors.deepPurple[200]),
                     ),
                   ),
                   onChanged: gameState != STATE_PLAYING
