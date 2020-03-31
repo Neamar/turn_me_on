@@ -70,9 +70,12 @@ class _LevelState extends State<Level> {
       if (toggleType == TOGGLE) {
         newState = _switchToggleInState(toggleIndex, newState);
       } else if (toggleType == SWITCH_ALL) {
+        print("Switching an all-toggle with state " + newState);
         for (int i = 0; i < _currentState.length; i++) {
           newState = _switchToggleInState(i, newState);
+          print("Switched toggle at " + i.toString() + " and new state is now " + newState);
         }
+        print("New state will be " + newState);
       } else if (toggleType == SWITCH_AROUND) {
         if (toggleIndex > 0) {
           newState = _switchToggleInState(toggleIndex - 1, newState);
