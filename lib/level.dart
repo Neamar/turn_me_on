@@ -216,7 +216,7 @@ class _LevelState extends State<Level> {
                   subtitle: getSubtitle(toggles[index]),
                   value: _currentState[index] == "1",
                   secondary: Container(
-                    constraints: BoxConstraints(minWidth: 40, maxWidth: 40),
+                    constraints: BoxConstraints(minWidth: 35, maxWidth: 35), // secondary min width is 35 and we want to center our icon
                     child: Text(
                       _getSecondaryTitle(toggles[index]),
                       textAlign: TextAlign.center,
