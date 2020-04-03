@@ -22,19 +22,7 @@ class MyApp extends StatelessWidget {
           appBar: AppBar(
             title: Text("Turn me on"),
             actions: <Widget>[
-              Consumer<UnlockedLevelsModel>(builder: (context, model, child) {
-                return IconButton(
-                  icon: Icon(Icons.delete_forever),
-                  onPressed: () {
-                    Fluttertoast.showToast(
-                      msg: "All progress reset.",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.CENTER,
-                    );
-                    model.reset();
-                  },
-                );
-              }),
+              const ResetButton()
             ],
           ),
           body: Consumer<UnlockedLevelsModel>(
@@ -105,3 +93,21 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class ResetButton extends StatelessWidget {
+  const ResetButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.delete_forever),
+      onPressed: () {
+        Fluttertoast.showToast(
+          msg: "All progress reset.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+        );
+        Provider.of<UnlockedLevelsModel>(context, listen: false).reset();
+      },
+    );
+  }
+}
