@@ -11,8 +11,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    PageController controller = PageController();
-
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -45,14 +43,9 @@ class MyApp extends StatelessWidget {
                 // SharedPreferences are not ready yet
                 return Center(child: CircularProgressIndicator());
               }
-              controller.addListener(() {
-                if(controller.page.roundToDouble() != model.currentlyPlayingLevel) {
-                  model.moveToLevel(controller.page.round());
-                }
-              });
 
               return PageView.builder(
-                controller: controller,
+                controller: model.controller,
                 itemBuilder: (context, position) {
                   return LevelStore.getLevel(position, model);
                 },
@@ -88,7 +81,7 @@ class MyApp extends StatelessWidget {
                 selectedItemColor: Colors.purple[800],
                 onTap: (int index) {
                   if (index == 0 && model.canMoveToPreviousLevel()) {
-                    controller.animateToPage(model.currentlyPlayingLevel - 1, duration: Duration(milliseconds: 500), curve: Curves.ease);
+                    model.moveToPreviousLevel();
                   }
                   else if (index == 0 && !model.canMoveToPreviousLevel()) {
                     Fluttertoast.showToast(
@@ -100,7 +93,7 @@ class MyApp extends StatelessWidget {
                   else if (((index == 1 && !model.canMoveToPreviousLevel()) ||
                           (index == 2)) &&
                       model.canMoveToNextLevel()) {
-                    controller.animateToPage(model.currentlyPlayingLevel + 1, duration: Duration(milliseconds: 500), curve: Curves.ease);
+                    model.moveToNextLevel();
                   }
                 },
               );

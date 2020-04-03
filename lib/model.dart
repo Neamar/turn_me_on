@@ -12,6 +12,7 @@ class UnlockedLevelsModel extends ChangeNotifier {
   bool isLoading = true;
   int lastUnlockedLevel = -1;
   int currentlyPlayingLevel = -1;
+  PageController controller;
 
   Future<int> _readStateFromDisk() async {
     _prefs = await SharedPreferences.getInstance();
@@ -32,10 +33,20 @@ class UnlockedLevelsModel extends ChangeNotifier {
       this.lastUnlockedLevel = lastUnlockedLevel;
       this.currentlyPlayingLevel = lastUnlockedLevel;
       print("Model loaded");
+
+      // Controller to be used on our PAgeView
+      controller = PageController(initialPage: currentlyPlayingLevel);
+      controller.addListener(() {
+        if(controller.page.roundToDouble() != currentlyPlayingLevel) {
+          loadLevel(controller.page.round());
+        }
+      });
+
       this.notifyListeners();
     }).catchError((error) {
       print(error.toString());
     });
+
   }
 
   void reset() {
@@ -53,14 +64,12 @@ class UnlockedLevelsModel extends ChangeNotifier {
   }
 
   bool canMoveToNextLevel() {
-    print("Levels" + currentlyPlayingLevel.toString() + " and last unlocked is " + lastUnlockedLevel.toString());
       return !isLoading && currentlyPlayingLevel < lastUnlockedLevel;
   }
 
   void moveToNextLevel() {
     if(canMoveToNextLevel()) {
-      currentlyPlayingLevel++;
-      notifyListeners();
+      controller.animateToPage(currentlyPlayingLevel + 1, duration: Duration(milliseconds: 500), curve: Curves.ease);
     }
   }
 
@@ -70,12 +79,11 @@ class UnlockedLevelsModel extends ChangeNotifier {
 
   void moveToPreviousLevel() {
     if(canMoveToPreviousLevel()) {
-      currentlyPlayingLevel--;
-      notifyListeners();
+      controller.animateToPage(currentlyPlayingLevel - 1, duration: Duration(milliseconds: 500), curve: Curves.ease);
     }
   }
 
-  void moveToLevel(int level) {
+  void loadLevel(int level) {
     if(level <0 || level >= LevelStore.levels.length) {
       throw("Level value is out of bounds");
     }
