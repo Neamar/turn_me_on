@@ -15,7 +15,7 @@ class LevelData {
 class LevelStore {
   static const List<LevelData> levels = [
     LevelData('T', '0', 1, "To win, enable all switches.\nThis level should be easy."),
-    LevelData('TTT∀', '0000', 1, "Some switches have special effects.\nFor this level, you're only allowed to switch one toggle—that's the number displayed above."),
+    LevelData('TTT∀', '0000', 1, "Some switches have special effects.\nFor this level, you're only allowed to switch one toggle—choose wisely."),
     LevelData('∀TT∀', '0110', 3),
     LevelData('T∀TT', '1011', 4),
     LevelData('T↕TT↕T', '000000', 2),
