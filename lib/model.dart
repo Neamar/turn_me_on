@@ -53,6 +53,7 @@ class UnlockedLevelsModel extends ChangeNotifier {
   }
 
   bool canMoveToNextLevel() {
+    print("Levels" + currentlyPlayingLevel.toString() + " and last unlocked is " + lastUnlockedLevel.toString());
       return !isLoading && currentlyPlayingLevel < lastUnlockedLevel;
   }
 
@@ -74,6 +75,14 @@ class UnlockedLevelsModel extends ChangeNotifier {
     }
   }
 
+  void moveToLevel(int level) {
+    if(level <0 || level >= LevelStore.levels.length) {
+      throw("Level value is out of bounds");
+    }
+
+    currentlyPlayingLevel = level;
+    notifyListeners();
+  }
 
   @override
   void notifyListeners() {
