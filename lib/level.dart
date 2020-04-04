@@ -177,7 +177,12 @@ class _LevelState extends State<Level> {
       headerColor = COLOR_FAIL;
     } else if (gameState == STATE_WON) {
       headerColor = COLOR_SUCCESS;
-      textToDisplay = "You won!";
+      if(model.canMoveToNextLevel()) {
+        textToDisplay = "You won!";
+      }
+      else {
+        textToDisplay = "YOU WON THE GAME. Congrats!";
+      }
     }
 
     bool hasAtLeastOneSwitchNth = toggles.contains(SWITCH_NTH);
