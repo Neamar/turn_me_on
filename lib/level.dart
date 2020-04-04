@@ -177,10 +177,9 @@ class _LevelState extends State<Level> {
       headerColor = COLOR_FAIL;
     } else if (gameState == STATE_WON) {
       headerColor = COLOR_SUCCESS;
-      if(model.canMoveToNextLevel()) {
+      if (model.canMoveToNextLevel()) {
         textToDisplay = "You won!";
-      }
-      else {
+      } else {
         textToDisplay = "YOU WON THE GAME. Congrats!";
       }
     }
@@ -195,43 +194,42 @@ class _LevelState extends State<Level> {
         curve: Curves.fastOutSlowIn,
         child: Material(
           color: Colors.transparent,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(children: <Widget>[
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        _remainingMoves > 0 ? _remainingMoves.toString() : '',
-                        style: TextStyle(
-                            fontSize: 50.0, // insert your font size here
-                            color: headerColor[900]),
+          child: InkWell(
+            onTap: () {
+              if(gameState == STATE_WON && model.canMoveToNextLevel()) {
+                model.moveToNextLevel();
+              }
+              else {
+                _reset();
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(children: <Widget>[
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          _remainingMoves > 0 ? _remainingMoves.toString() : '',
+                          style: TextStyle(
+                              fontSize: 50.0, // insert your font size here
+                              color: headerColor[900]),
+                        ),
                       ),
-                    ),
-                    Text(textToDisplay),
-                  ],
+                      Text(textToDisplay),
+                    ],
+                  ),
                 ),
-              ),
-              AnimatedCrossFade(
-                crossFadeState: gameState == STATE_WON && model.canMoveToNextLevel() ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-                duration: defaultAnimationDuration,
-                firstChild: IconButton(
-                  icon: Icon(Icons.navigate_next, color: headerColor[900], semanticLabel: 'Move to next level'),
-                  onPressed: () {
-                    model.moveToNextLevel();
-                  },
-                  iconSize: 50,
-                ),
-                secondChild: IconButton(
-                  icon: Icon(Icons.refresh, color: headerColor[900], semanticLabel: 'Restart level'),
-                  onPressed: _reset,
-                  iconSize: 50,
-                ),
-              )
-            ]),
+                AnimatedCrossFade(
+                    crossFadeState: gameState == STATE_WON && model.canMoveToNextLevel() ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                    duration: defaultAnimationDuration,
+                    firstChild: Icon(Icons.navigate_next, color: headerColor[900], semanticLabel: 'Move to next level', size: 50),
+                    secondChild: Icon(Icons.refresh, color: headerColor[900], semanticLabel: 'Restart level', size: 50)),
+              ]),
+            ),
           ),
         ),
       ),

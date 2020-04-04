@@ -19,7 +19,7 @@ class LevelStore {
     LevelData('∀TT∀', '0110', 3),
     LevelData('T∀TT', '1011', 4),
     LevelData('T↕TT↕T', '000000', 2),
-    LevelData('T↕↕↕T', '10001', 1),
+    LevelData('T↕↕↕T', '10001', 1, "You only apply the effect of the switch you clicked on. There is no cascade effect!"),
     LevelData('T↕TT∀T', '111001', 3),
     LevelData('∀↕↕T', '1001', 2),
     LevelData('↕∀↕T∀', '10100', 4),

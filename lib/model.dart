@@ -35,7 +35,7 @@ class UnlockedLevelsModel extends ChangeNotifier {
       print("Model loaded");
 
       // Controller to be used on our PageView
-      controller = PageController(initialPage: currentlyPlayingLevel);
+      controller = PageController(initialPage: currentlyPlayingLevel, keepPage: false);
       controller.addListener(() {
         if(controller.page.roundToDouble() != currentlyPlayingLevel) {
           loadLevel(controller.page.round());
