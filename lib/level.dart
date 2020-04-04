@@ -45,6 +45,8 @@ class _LevelState extends State<Level> {
   String _currentState;
   String gameState;
 
+  AnimationController winAnimation;
+
   _LevelState(this.toggles, this._initialState, this._initialMoves,
       this.tutorial, this.model) {
     this._currentState = _initialState;
@@ -170,46 +172,51 @@ class _LevelState extends State<Level> {
     int enabledCount = "1".allMatches(_currentState).length;
 
     return Column(children: <Widget>[
-      Material(
+      AnimatedContainer(
+        duration: Duration(milliseconds: 350),
         color: headerColor[300],
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(children: <Widget>[
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      _remainingMoves > 0 ? _remainingMoves.toString() : '',
-                      style: TextStyle(
-                          fontSize: 50.0, // insert your font size here
-                          color: headerColor[900]),
+        curve: Curves.fastOutSlowIn,
+        child: Material(
+          color: Colors.transparent,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(children: <Widget>[
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        _remainingMoves > 0 ? _remainingMoves.toString() : '',
+                        style: TextStyle(
+                            fontSize: 50.0, // insert your font size here
+                            color: headerColor[900]),
+                      ),
                     ),
-                  ),
-                  Text(textToDisplay),
-                ],
+                    Text(textToDisplay),
+                  ],
+                ),
               ),
-            ),
-            if (gameState == STATE_WON && model.canMoveToNextLevel())
-              IconButton(
-                icon: Icon(Icons.navigate_next,
-                    color: headerColor[900],
-                    semanticLabel: 'Move to next level'),
-                onPressed: () {
-                  model.moveToNextLevel();
-                },
-                iconSize: 50,
-              ),
-            if (gameState != STATE_WON)
-              IconButton(
-                icon: Icon(Icons.refresh,
-                    color: headerColor[900], semanticLabel: 'Restart level'),
-                onPressed: _reset,
-                iconSize: 50,
-              ),
-          ]),
+              if (gameState == STATE_WON && model.canMoveToNextLevel())
+                IconButton(
+                  icon: Icon(Icons.navigate_next,
+                      color: headerColor[900],
+                      semanticLabel: 'Move to next level'),
+                  onPressed: () {
+                    model.moveToNextLevel();
+                  },
+                  iconSize: 50,
+                ),
+              if (gameState != STATE_WON)
+                IconButton(
+                  icon: Icon(Icons.refresh,
+                      color: headerColor[900], semanticLabel: 'Restart level'),
+                  onPressed: _reset,
+                  iconSize: 50,
+                ),
+            ]),
+          ),
         ),
       ),
       if (tutorial != null)
