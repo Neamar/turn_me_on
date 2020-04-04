@@ -11,13 +11,10 @@ class Level extends StatefulWidget {
   final int allowedMoves;
   final UnlockedLevelsModel model;
 
-  Level(Key key, this.toggles, this.initialState, this.allowedMoves,
-      this.tutorial, this.model)
-      : super(key: key);
+  Level(Key key, this.toggles, this.initialState, this.allowedMoves, this.tutorial, this.model) : super(key: key);
 
   @override
-  _LevelState createState() =>
-      _LevelState(toggles, initialState, allowedMoves, tutorial, model);
+  _LevelState createState() => _LevelState(toggles, initialState, allowedMoves, tutorial, model);
 }
 
 class _LevelState extends State<Level> {
@@ -35,6 +32,8 @@ class _LevelState extends State<Level> {
   static const String SWITCH_EXTREMES = 'C';
   static const String SWITCH_NTH = 'N';
 
+  static const defaultAnimationDuration = Duration(milliseconds: 350);
+
   final String toggles;
   final int _initialMoves;
   final String _initialState;
@@ -47,8 +46,7 @@ class _LevelState extends State<Level> {
 
   AnimationController winAnimation;
 
-  _LevelState(this.toggles, this._initialState, this._initialMoves,
-      this.tutorial, this.model) {
+  _LevelState(this.toggles, this._initialState, this._initialMoves, this.tutorial, this.model) {
     this._currentState = _initialState;
     this._remainingMoves = _initialMoves;
     gameState = STATE_PLAYING;
@@ -59,9 +57,7 @@ class _LevelState extends State<Level> {
   }
 
   String _switchToggleInState(int toggleIndex, String state) {
-    return state.substring(0, toggleIndex) +
-        _switch(state[toggleIndex]) +
-        state.substring(toggleIndex + 1);
+    return state.substring(0, toggleIndex) + _switch(state[toggleIndex]) + state.substring(toggleIndex + 1);
   }
 
   void _pressToggle(int toggleIndex) {
@@ -75,10 +71,7 @@ class _LevelState extends State<Level> {
         print("Switching an all-toggle with state " + newState);
         for (int i = 0; i < _currentState.length; i++) {
           newState = _switchToggleInState(i, newState);
-          print("Switched toggle at " +
-              i.toString() +
-              " and new state is now " +
-              newState);
+          print("Switched toggle at " + i.toString() + " and new state is now " + newState);
         }
         print("New state will be " + newState);
       } else if (toggleType == SWITCH_AROUND) {
@@ -176,7 +169,7 @@ class _LevelState extends State<Level> {
 
     return Column(children: <Widget>[
       AnimatedContainer(
-        duration: Duration(milliseconds: 350),
+        duration: defaultAnimationDuration,
         color: headerColor[300],
         curve: Curves.fastOutSlowIn,
         child: Material(
@@ -202,23 +195,17 @@ class _LevelState extends State<Level> {
                 ),
               ),
               AnimatedCrossFade(
-                crossFadeState:
-                    gameState == STATE_WON && model.canMoveToNextLevel()
-                        ? CrossFadeState.showFirst
-                        : CrossFadeState.showSecond,
-                duration: const Duration(milliseconds: 350),
+                crossFadeState: gameState == STATE_WON && model.canMoveToNextLevel() ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                duration: defaultAnimationDuration,
                 firstChild: IconButton(
-                  icon: Icon(Icons.navigate_next,
-                      color: headerColor[900],
-                      semanticLabel: 'Move to next level'),
+                  icon: Icon(Icons.navigate_next, color: headerColor[900], semanticLabel: 'Move to next level'),
                   onPressed: () {
                     model.moveToNextLevel();
                   },
                   iconSize: 50,
                 ),
                 secondChild: IconButton(
-                  icon: Icon(Icons.refresh,
-                      color: headerColor[900], semanticLabel: 'Restart level'),
+                  icon: Icon(Icons.refresh, color: headerColor[900], semanticLabel: 'Restart level'),
                   onPressed: _reset,
                   iconSize: 50,
                 ),
@@ -262,9 +249,7 @@ class _LevelState extends State<Level> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 20.0, // insert your font size here
-                          color: hasAtLeastOneSwitchNth && enabledCount == index
-                              ? Colors.deepPurple[900]
-                              : Colors.deepPurple[200]),
+                          color: hasAtLeastOneSwitchNth && enabledCount == index ? Colors.deepPurple[900] : Colors.deepPurple[200]),
                     ),
                   ),
                   onChanged: gameState != STATE_PLAYING
