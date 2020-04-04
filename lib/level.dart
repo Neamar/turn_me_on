@@ -75,7 +75,10 @@ class _LevelState extends State<Level> {
         print("Switching an all-toggle with state " + newState);
         for (int i = 0; i < _currentState.length; i++) {
           newState = _switchToggleInState(i, newState);
-          print("Switched toggle at " + i.toString() + " and new state is now " + newState);
+          print("Switched toggle at " +
+              i.toString() +
+              " and new state is now " +
+              newState);
         }
         print("New state will be " + newState);
       } else if (toggleType == SWITCH_AROUND) {
@@ -198,8 +201,13 @@ class _LevelState extends State<Level> {
                   ],
                 ),
               ),
-              if (gameState == STATE_WON && model.canMoveToNextLevel())
-                IconButton(
+              AnimatedCrossFade(
+                crossFadeState:
+                    gameState == STATE_WON && model.canMoveToNextLevel()
+                        ? CrossFadeState.showFirst
+                        : CrossFadeState.showSecond,
+                duration: const Duration(milliseconds: 350),
+                firstChild: IconButton(
                   icon: Icon(Icons.navigate_next,
                       color: headerColor[900],
                       semanticLabel: 'Move to next level'),
@@ -208,13 +216,13 @@ class _LevelState extends State<Level> {
                   },
                   iconSize: 50,
                 ),
-              if (gameState != STATE_WON)
-                IconButton(
+                secondChild: IconButton(
                   icon: Icon(Icons.refresh,
                       color: headerColor[900], semanticLabel: 'Restart level'),
                   onPressed: _reset,
                   iconSize: 50,
                 ),
+              )
             ]),
           ),
         ),
