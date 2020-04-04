@@ -62,7 +62,6 @@ class _LevelState extends State<Level> {
 
   void _pressToggle(int toggleIndex) {
     setState(() {
-      _remainingMoves--;
       String newState = _currentState;
       String toggleType = toggles[toggleIndex];
       if (toggleType == TOGGLE) {
@@ -91,7 +90,12 @@ class _LevelState extends State<Level> {
         newState = _switchToggleInState(toggleIndex, newState);
         newState = _switchToggleInState(enabledCount, newState);
       }
-      _currentState = newState;
+
+      // Idempotent moves should not decrease your pool.
+      if (_currentState != newState) {
+        _currentState = newState;
+        _remainingMoves--;
+      }
 
       bool hasWon = !_currentState.contains("0");
       if (hasWon) {
@@ -111,13 +115,19 @@ class _LevelState extends State<Level> {
     });
   }
 
-  String _getTitle(String toggleType) {
+  String _getTitle(String toggleType, int index, int totalToggles) {
     if (toggleType == TOGGLE) {
       return 'A simple switch';
     } else if (toggleType == SWITCH_ALL) {
       return 'Toggle all switches';
     } else if (toggleType == SWITCH_AROUND) {
-      return 'Toggle me and both switches around me';
+      if (index == 0) {
+        return 'Toggle me and the switch below me';
+      } else if (index == totalToggles - 1) {
+        return 'Toggle me and the switch above me';
+      } else {
+        return 'Toggle me and both switches around me';
+      }
     } else if (toggleType == SWITCH_EXTREMES) {
       return 'Toggle me, and the first and last switches';
     } else if (toggleType == SWITCH_NTH) {
@@ -134,13 +144,19 @@ class _LevelState extends State<Level> {
     return null;
   }
 
-  String _getSecondaryTitle(String toggleType) {
+  String _getSecondaryTitle(String toggleType, int index, int totalToggles) {
     if (toggleType == TOGGLE) {
       return '·';
     } else if (toggleType == SWITCH_ALL) {
-      return SWITCH_ALL;
+      return '∞';
     } else if (toggleType == SWITCH_AROUND) {
-      return SWITCH_AROUND;
+      if (index == 0) {
+        return '↓';
+      } else if (index == totalToggles - 1) {
+        return '↑';
+      } else {
+        return SWITCH_AROUND;
+      }
     } else if (toggleType == SWITCH_EXTREMES) {
       return 'Ω';
     } else if (toggleType == SWITCH_NTH) {
@@ -238,21 +254,21 @@ class _LevelState extends State<Level> {
               itemCount: _currentState.length,
               itemBuilder: (BuildContext context, int index) {
                 return SwitchListTile(
-                  title: Text(_getTitle(toggles[index])),
+                  title: Text(_getTitle(toggles[index], index, toggles.length)),
                   subtitle: getSubtitle(toggles[index]),
                   value: _currentState[index] == "1",
                   secondary: Container(
                     constraints: BoxConstraints(minWidth: 35, maxWidth: 35),
                     // secondary min width is 35 and we want to center our icon
                     child: Text(
-                      _getSecondaryTitle(toggles[index]),
+                      _getSecondaryTitle(toggles[index], index, toggles.length),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 20.0, // insert your font size here
                           color: hasAtLeastOneSwitchNth && enabledCount == index ? Colors.deepPurple[900] : Colors.deepPurple[200]),
                     ),
                   ),
-                  onChanged: gameState != STATE_PLAYING
+                  onChanged: gameState != STATE_PLAYING || (toggles[index] == SWITCH_NTH && enabledCount == index)
                       ? null
                       : (bool value) {
                           _pressToggle(index);

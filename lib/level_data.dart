@@ -31,7 +31,7 @@ class LevelStore {
     LevelData('TT↕∀∀C↕', '0011011', 4),
     LevelData('↕↕∀↕↕∀', '000110', 3),
     LevelData('T↕↕N', '0010', 2),
-    LevelData('∀↕↕CTN', '001000', 3, "Notice the switch displayed in deep purple?\nIt indicates you the toggle that'll be impacted by the ∑ toggle."),
+    LevelData('∀↕↕CTN', '001000', 3, "Notice the switch displayed in deep purple?\nIt indicates which toggle will be impacted by ∑."),
     LevelData('NC∀∀', '0011', 5),
     LevelData('↕↕N↕', '0101', 6),
     LevelData('T∀N∀∀∀', '001110', 11),
