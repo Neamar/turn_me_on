@@ -144,7 +144,7 @@ class _LevelState extends State<Level> {
     return null;
   }
 
-  String _getSecondaryTitle(String toggleType, int index, int totalToggles) {
+  String _getSwitchIcon(String toggleType, int index, int totalToggles) {
     if (toggleType == TOGGLE) {
       return '·';
     } else if (toggleType == SWITCH_ALL) {
@@ -164,6 +164,16 @@ class _LevelState extends State<Level> {
     }
 
     return '?';
+  }
+
+  double _getIconSize(String toggleType) {
+   if (toggleType == SWITCH_AROUND) {
+      return 25;
+    } else if (toggleType == SWITCH_NTH) {
+      return 18;
+    }
+
+    return 20;
   }
 
   @override
@@ -215,7 +225,7 @@ class _LevelState extends State<Level> {
                         child: Text(
                           _remainingMoves > 0 ? _remainingMoves.toString() : '',
                           style: TextStyle(
-                              fontSize: 50.0, // insert your font size here
+                              fontSize: 50.0,
                               color: headerColor[900]),
                         ),
                       ),
@@ -264,10 +274,10 @@ class _LevelState extends State<Level> {
                     constraints: BoxConstraints(minWidth: 35, maxWidth: 35),
                     // secondary min width is 35 and we want to center our icon
                     child: Text(
-                      _getSecondaryTitle(toggles[index], index, toggles.length),
+                      _getSwitchIcon(toggles[index], index, toggles.length),
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          fontSize: 20.0, // insert your font size here
+                          fontSize: _getIconSize(toggles[index]),
                           color: hasAtLeastOneSwitchNth && enabledCount == index ? Colors.deepPurple[900] : Colors.deepPurple[200]),
                     ),
                   ),

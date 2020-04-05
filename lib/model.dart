@@ -37,7 +37,7 @@ class UnlockedLevelsModel extends ChangeNotifier {
       // Controller to be used on our PageView
       controller = PageController(initialPage: currentlyPlayingLevel, keepPage: false);
       controller.addListener(() {
-        if(controller.page.roundToDouble() != currentlyPlayingLevel) {
+        if (controller.page.roundToDouble() != currentlyPlayingLevel) {
           loadLevel(controller.page.round());
         }
       });
@@ -46,7 +46,6 @@ class UnlockedLevelsModel extends ChangeNotifier {
     }).catchError((error) {
       print(error.toString());
     });
-
   }
 
   void reset() {
@@ -64,11 +63,11 @@ class UnlockedLevelsModel extends ChangeNotifier {
   }
 
   bool canMoveToNextLevel() {
-      return !isLoading && currentlyPlayingLevel < lastUnlockedLevel;
+    return !isLoading && currentlyPlayingLevel < lastUnlockedLevel;
   }
 
   void moveToNextLevel() {
-    if(canMoveToNextLevel()) {
+    if (canMoveToNextLevel()) {
       controller.animateToPage(currentlyPlayingLevel + 1, duration: Duration(milliseconds: 500), curve: Curves.ease);
     }
   }
@@ -78,14 +77,14 @@ class UnlockedLevelsModel extends ChangeNotifier {
   }
 
   void moveToPreviousLevel() {
-    if(canMoveToPreviousLevel()) {
+    if (canMoveToPreviousLevel()) {
       controller.animateToPage(currentlyPlayingLevel - 1, duration: Duration(milliseconds: 500), curve: Curves.ease);
     }
   }
 
   void loadLevel(int level) {
-    if(level <0 || level >= LevelStore.levels.length) {
-      throw("Level value is out of bounds");
+    if (level < 0 || level >= LevelStore.levels.length) {
+      throw ("Level value is out of bounds");
     }
 
     currentlyPlayingLevel = level;
@@ -99,7 +98,7 @@ class UnlockedLevelsModel extends ChangeNotifier {
   }
 
   unlockNextLevel() {
-    if(lastUnlockedLevel < LevelStore.levels.length - 1) {
+    if (lastUnlockedLevel < LevelStore.levels.length - 1) {
       lastUnlockedLevel++;
     }
     notifyListeners();
