@@ -1,5 +1,5 @@
 from itertools import product
-from solver import solve_level
+from solver import solve_level, press_switch
 from random import random
 
 def fuzz_level(level):
@@ -19,8 +19,10 @@ def fuzz_level(level):
   return best_option
 
 
-for potential_level_arr in product(["T", "N", "∀", "↕", "C"], repeat=6):
+for potential_level_arr in product(["T", "∀", "↕", "C", "⇑"], repeat=6):
   if potential_level_arr[0] == "C" or potential_level_arr[-1] == "C":
+    continue
+  if '⇑' not in potential_level_arr:
     continue
 
   potential_level = ''.join(potential_level_arr)

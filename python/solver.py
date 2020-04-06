@@ -2,6 +2,7 @@ TOGGLE = 'T'
 SWITCH_ALL = '∀'
 SWITCH_AROUND = '↕'
 SWITCH_EXTREMES = 'C'
+SWITCH_ABOVE = '⇑'
 SWITCH_NTH = 'N'
 
 
@@ -39,6 +40,9 @@ def press_switch(toggle_index, level, state):
     switch_toggle(0, new_state)
     switch_toggle(len(state) - 1, new_state)
     return new_state
+  elif toggle_type == SWITCH_ABOVE:
+    v = switch(state[toggle_index])
+    return [v if i <= toggle_index else s for i, s in enumerate(state)]
   elif toggle_type == SWITCH_NTH:
     new_state = state[:]
     enabled_count = new_state.count("1")
