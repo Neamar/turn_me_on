@@ -11,14 +11,8 @@ def switch(toggle_state):
   return '0' if toggle_state == '1' else '1'
 
 
-def switch_toggle(toggle_index, state, level):
-  if level[toggle_index] == SWITCH_INTRICATE:
-    new_value = switch(state[toggle_index])
-    for i in range(len(state)):
-      if level[i] == SWITCH_INTRICATE:
-        state[i] = new_value
-  else:
-    state[toggle_index] = switch(state[toggle_index])
+def switch_toggle(toggle_index, state):
+  state[toggle_index] = switch(state[toggle_index])
 
 
 def press_switch(toggle_index, level, state):
@@ -29,23 +23,23 @@ def press_switch(toggle_index, level, state):
 
   if toggle_type == TOGGLE:
     new_state = state[:]
-    switch_toggle(toggle_index, new_state, level)
+    switch_toggle(toggle_index, new_state)
     return new_state
   elif toggle_type == SWITCH_ALL:
     return [switch(s) for s in state]
   elif toggle_type == SWITCH_AROUND:
     new_state = state[:]
     if toggle_index > 0:
-      switch_toggle(toggle_index - 1, new_state, level)
-    switch_toggle(toggle_index, new_state, level)
+      switch_toggle(toggle_index - 1, new_state)
+    switch_toggle(toggle_index, new_state)
     if toggle_index < len(state) - 1:
-      switch_toggle(toggle_index + 1, new_state, level)
+      switch_toggle(toggle_index + 1, new_state)
     return new_state
   elif toggle_type == SWITCH_EXTREMES:
     new_state = state[:]
-    switch_toggle(toggle_index, new_state, level)
-    switch_toggle(0, new_state, level)
-    switch_toggle(len(state) - 1, new_state, level)
+    switch_toggle(toggle_index, new_state)
+    switch_toggle(0, new_state)
+    switch_toggle(len(state) - 1, new_state)
     return new_state
   elif toggle_type == SWITCH_ABOVE:
     v = switch(state[toggle_index])
@@ -56,8 +50,8 @@ def press_switch(toggle_index, level, state):
   elif toggle_type == SWITCH_NTH:
     new_state = state[:]
     enabled_count = new_state.count("1")
-    switch_toggle(toggle_index, new_state, level)
-    switch_toggle(enabled_count, new_state, level)
+    switch_toggle(toggle_index, new_state)
+    switch_toggle(enabled_count, new_state)
     return new_state
 
   raise Exception("Unknown toggle type: %s in %s" % (toggle_type, level))
