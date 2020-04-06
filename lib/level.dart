@@ -122,16 +122,16 @@ class _LevelState extends State<Level> {
       return 'Toggle all switches';
     } else if (toggleType == SWITCH_AROUND) {
       if (index == 0) {
-        return 'Toggle me and the switch below me';
+        return 'Toggle me, and the switch below me';
       } else if (index == totalToggles - 1) {
-        return 'Toggle me and the switch above me';
+        return 'Toggle me, and the switch above me';
       } else {
-        return 'Toggle me and both switches around me';
+        return 'Toggle me, and both switches around me';
       }
     } else if (toggleType == SWITCH_EXTREMES) {
       return 'Toggle me, and the first and last switches';
     } else if (toggleType == SWITCH_NTH) {
-      return 'Toggle me and the n-th toggle';
+      return 'Toggle me, and the n-th toggle';
     }
 
     return 'An unknown toggle';
