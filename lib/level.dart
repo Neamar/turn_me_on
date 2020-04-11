@@ -30,8 +30,8 @@ class _LevelState extends State<Level> {
   static const String SWITCH_ALL = '∀';
   static const String SWITCH_AROUND = '↕';
   static const String SWITCH_EXTREMES = 'C';
+  static const String SWITCH_ABOVE = '⇑';
   static const String SWITCH_NTH = 'N';
-
   static const defaultAnimationDuration = Duration(milliseconds: 350);
 
   final String toggles;
@@ -67,12 +67,9 @@ class _LevelState extends State<Level> {
       if (toggleType == TOGGLE) {
         newState = _switchToggleInState(toggleIndex, newState);
       } else if (toggleType == SWITCH_ALL) {
-        print("Switching an all-toggle with state " + newState);
         for (int i = 0; i < _currentState.length; i++) {
           newState = _switchToggleInState(i, newState);
-          print("Switched toggle at " + i.toString() + " and new state is now " + newState);
         }
-        print("New state will be " + newState);
       } else if (toggleType == SWITCH_AROUND) {
         if (toggleIndex > 0) {
           newState = _switchToggleInState(toggleIndex - 1, newState);
@@ -85,6 +82,9 @@ class _LevelState extends State<Level> {
         newState = _switchToggleInState(0, newState);
         newState = _switchToggleInState(toggleIndex, newState);
         newState = _switchToggleInState(toggles.length - 1, newState);
+      } else if (toggleType == SWITCH_ABOVE) {
+        String value = _switch(_currentState[toggleIndex]);
+        newState = (value * (toggleIndex + 1)) + _currentState.substring(toggleIndex + 1);
       } else if (toggleType == SWITCH_NTH) {
         int enabledCount = "1".allMatches(_currentState).length;
         newState = _switchToggleInState(toggleIndex, newState);
@@ -130,6 +130,8 @@ class _LevelState extends State<Level> {
       }
     } else if (toggleType == SWITCH_EXTREMES) {
       return 'Toggle me, and the first and last switches';
+    } else if(toggleType == SWITCH_ABOVE) {
+      return 'Toggle me, and set all switches above to my value';
     } else if (toggleType == SWITCH_NTH) {
       return 'Toggle me, and the n-th toggle';
     }
@@ -159,6 +161,8 @@ class _LevelState extends State<Level> {
       }
     } else if (toggleType == SWITCH_EXTREMES) {
       return 'Ω';
+    } else if (toggleType == SWITCH_ABOVE) {
+      return SWITCH_ABOVE;
     } else if (toggleType == SWITCH_NTH) {
       return '∑';
     }
@@ -167,7 +171,7 @@ class _LevelState extends State<Level> {
   }
 
   double _getIconSize(String toggleType) {
-   if (toggleType == SWITCH_AROUND) {
+    if (toggleType == SWITCH_AROUND) {
       return 25;
     } else if (toggleType == SWITCH_NTH) {
       return 18;
@@ -206,10 +210,9 @@ class _LevelState extends State<Level> {
           color: Colors.transparent,
           child: InkWell(
             onTap: () {
-              if(gameState == STATE_WON && model.canMoveToNextLevel()) {
+              if (gameState == STATE_WON && model.canMoveToNextLevel()) {
                 model.moveToNextLevel();
-              }
-              else {
+              } else {
                 _reset();
               }
             },
@@ -224,9 +227,7 @@ class _LevelState extends State<Level> {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           _remainingMoves > 0 ? _remainingMoves.toString() : '',
-                          style: TextStyle(
-                              fontSize: 50.0,
-                              color: headerColor[900]),
+                          style: TextStyle(fontSize: 50.0, color: headerColor[900]),
                         ),
                       ),
                       Text(textToDisplay),
