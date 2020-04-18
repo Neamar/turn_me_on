@@ -31,6 +31,7 @@ class _LevelState extends State<Level> {
   static const String SWITCH_AROUND = '↕';
   static const String SWITCH_EXTREMES = 'C';
   static const String SWITCH_ABOVE = '⇑';
+  static const String SWITCH_INTRICATE = '%';
   static const String SWITCH_NTH = 'N';
   static const defaultAnimationDuration = Duration(milliseconds: 350);
 
@@ -60,6 +61,10 @@ class _LevelState extends State<Level> {
     return state.substring(0, toggleIndex) + _switch(state[toggleIndex]) + state.substring(toggleIndex + 1);
   }
 
+  String _setToggleInState(int toggleIndex, String value, String state) {
+    return state.substring(0, toggleIndex) + value + state.substring(toggleIndex + 1);
+  }
+
   void _pressToggle(int toggleIndex) {
     setState(() {
       String newState = _currentState;
@@ -85,6 +90,16 @@ class _LevelState extends State<Level> {
       } else if (toggleType == SWITCH_ABOVE) {
         String value = _switch(_currentState[toggleIndex]);
         newState = (value * (toggleIndex + 1)) + _currentState.substring(toggleIndex + 1);
+      } else if(toggleType == SWITCH_INTRICATE) {
+        String toggledState = _switch(_currentState[toggleIndex]);
+        for (int i = 0; i < _currentState.length; i++) {
+          if(i == toggleIndex) {
+            newState = _setToggleInState(i, toggledState, newState);
+          }
+          else if(toggles[i] == SWITCH_INTRICATE) {
+            newState = _setToggleInState(i, _switch(toggledState), newState);
+          }
+        }
       } else if (toggleType == SWITCH_NTH) {
         int enabledCount = "1".allMatches(_currentState).length;
         newState = _switchToggleInState(toggleIndex, newState);
@@ -130,8 +145,10 @@ class _LevelState extends State<Level> {
       }
     } else if (toggleType == SWITCH_EXTREMES) {
       return 'Toggle me, and the first and last switches';
-    } else if(toggleType == SWITCH_ABOVE) {
+    } else if (toggleType == SWITCH_ABOVE) {
       return 'Toggle me, and set all switches above to my value';
+    } else if (toggleType == SWITCH_INTRICATE) {
+      return 'Toggle me, set opposite value on my twin';
     } else if (toggleType == SWITCH_NTH) {
       return 'Toggle me, and the n-th toggle';
     }
@@ -163,6 +180,8 @@ class _LevelState extends State<Level> {
       return 'Ω';
     } else if (toggleType == SWITCH_ABOVE) {
       return SWITCH_ABOVE;
+    } else if (toggleType == SWITCH_INTRICATE) {
+      return '☯';
     } else if (toggleType == SWITCH_NTH) {
       return '∑';
     }
