@@ -1,5 +1,5 @@
 from itertools import product
-from solver import solve_level
+from solver import solve_level, press_switch
 from random import random
 
 def fuzz_level(level):
@@ -18,11 +18,21 @@ def fuzz_level(level):
       best_option = (initial_state, solution)
   return best_option
 
+# print(press_switch(1, ['↕', '%', '%'], [ '1', '0', '1']))
+# print(solve_level('↕%%', '101'))
+# raise "stop"
 
-for potential_level_arr in product(["T", "N", "∀", "↕", "C"], repeat=6):
+LEVEL_SIZE = 6
+uninteresting_sequence = ''.join([str(i+1) for i in range(LEVEL_SIZE)])
+for potential_level_arr in product(["T", "∀", "↕", "C", "%"], repeat=LEVEL_SIZE):
   if potential_level_arr[0] == "C" or potential_level_arr[-1] == "C":
+    continue
+  if potential_level_arr.count('%') not in (0,2):
+    continue
+  if potential_level_arr.count('T') > 3:
     continue
 
   potential_level = ''.join(potential_level_arr)
   initial_state, solution = fuzz_level(potential_level)
-  print('%s Best option is initial_state %s, actions : %s (%s)' % (potential_level, initial_state, solution, len(solution)))
+  #if len(solution) > LEVEL_SIZE - 1 and solution != uninteresting_sequence:
+  print('("%s", "%s") # %s (%s)' % (potential_level, initial_state, solution, len(solution)))
