@@ -46,7 +46,7 @@ def press_switch(toggle_index, level, state):
     return [v if i <= toggle_index else s for i, s in enumerate(state)]
   elif toggle_type == SWITCH_INTRICATE:
     v = switch(state[toggle_index])
-    return [v if level[i] == SWITCH_INTRICATE else s for i, s in enumerate(state)]
+    return [v if i == toggle_index else (s if level[i] != SWITCH_INTRICATE else switch(v)) for i, s in enumerate(state)]
   elif toggle_type == SWITCH_NTH:
     new_state = state[:]
     enabled_count = new_state.count("1")
