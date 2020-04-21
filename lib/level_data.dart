@@ -48,7 +48,10 @@ class LevelStore {
     LevelData("∀%TTC%", "000001", 4),
     LevelData("↕%∀%T", "00011", 5),
     LevelData("↕∀C%%", "11001", 5),
+    LevelData("%%↕↕↕", "00011", 5),
+    LevelData("%%%↕T", "00110", 5),
     LevelData("T∀%CT%", "100011", 6),
+    LevelData("%⇑TT%", "01000", 5),
     // Switch "sum of"
     LevelData('T↕↕N', '0010', 2),
     LevelData('∀↕↕CTN', '001000', 3, "Notice the switch displayed in deep purple?\nIt indicates which toggle will be impacted by ∑."),
