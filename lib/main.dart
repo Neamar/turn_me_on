@@ -8,7 +8,7 @@ import 'model.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  Tracking.analytics.init("f3f5aa45784b01e4782cc98c605d43c4");
+  Tracking.analytics.init("1f39eabedbcc6c75a33904d60e2414ad");
   Tracking.analytics.enableCoppaControl();
   Tracking.analytics.trackingSessionEvents(true);
   runApp(TurnMeOnApp());

@@ -29,17 +29,6 @@ class Tracking {
       "timeSpent": levelEnded.difference(levelStarted).inSeconds,
       "wonForFirstTime":  result == LevelResult.won && levelState.model.currentlyPlayingLevel == levelState.model.lastUnlockedLevel
     });
-
-    print({
-      "code": levelState.toggles,
-      "number": levelState.model.currentlyPlayingLevel,
-      "result": result.toString(),
-      "allowedMoves": levelState.initialMoves,
-      "isTutorial": levelState.isTutorial(),
-      "remainingMoves": levelState.remainingMoves,
-      "timeSpent": levelEnded.difference(levelStarted).inSeconds,
-      "wonForFirstTime":  result == LevelResult.won && levelState.model.currentlyPlayingLevel == levelState.model.lastUnlockedLevel
-    });
   }
 
   static void logPlayerIdentity(int lastUnlockedLevel, int currentlyPlayingLevel) {
