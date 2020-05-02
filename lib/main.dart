@@ -2,12 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:turnmeon/level_data.dart';
+import 'package:turnmeon/tracking.dart';
 
 import 'model.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  Tracking.analytics.init("1f39eabedbcc6c75a33904d60e2414ad");
+  Tracking.analytics.enableCoppaControl();
+  Tracking.analytics.trackingSessionEvents(true);
+  runApp(TurnMeOnApp());
+}
 
-class MyApp extends StatelessWidget {
+class TurnMeOnApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
