@@ -18,6 +18,7 @@ jobs:
           channel: 'beta' # flutter web is not stable yet
       - run: flutter --version
       - run: flutter pub get
+      - run: flutter config --enable-web
       -  run: |
           make website
       - name: Deploy 🚀
