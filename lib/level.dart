@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:turnmeon/tracking.dart';
 
 import 'model.dart';
 
@@ -14,10 +15,10 @@ class Level extends StatefulWidget {
   Level(Key key, this.toggles, this.initialState, this.allowedMoves, this.tutorial, this.model) : super(key: key);
 
   @override
-  _LevelState createState() => _LevelState(toggles, initialState, allowedMoves, tutorial, model);
+  LevelState createState() => LevelState(toggles, initialState, allowedMoves, tutorial, model);
 }
 
-class _LevelState extends State<Level> {
+class LevelState extends State<Level> {
   static const MaterialColor COLOR_GAME = Colors.deepPurple;
   static const MaterialColor COLOR_FAIL = Colors.red;
   static const MaterialColor COLOR_SUCCESS = Colors.green;
@@ -36,21 +37,23 @@ class _LevelState extends State<Level> {
   static const defaultAnimationDuration = Duration(milliseconds: 350);
 
   final String toggles;
-  final int _initialMoves;
-  final String _initialState;
-  final String tutorial;
+  final int initialMoves;
   final UnlockedLevelsModel model;
+  int remainingMoves;
 
-  int _remainingMoves;
+  final String _initialState;
+  final String _tutorial;
+
   String _currentState;
-  String gameState;
+  String _gameState;
 
   AnimationController winAnimation;
 
-  _LevelState(this.toggles, this._initialState, this._initialMoves, this.tutorial, this.model) {
+  LevelState(this.toggles, this._initialState, this.initialMoves, this._tutorial, this.model) {
     this._currentState = _initialState;
-    this._remainingMoves = _initialMoves;
-    gameState = STATE_PLAYING;
+    this.remainingMoves = initialMoves;
+    _gameState = STATE_PLAYING;
+    Tracking.logLevelStarted();
   }
 
   String _switch(String toggleState) {
@@ -63,6 +66,10 @@ class _LevelState extends State<Level> {
 
   String _setToggleInState(int toggleIndex, String value, String state) {
     return state.substring(0, toggleIndex) + value + state.substring(toggleIndex + 1);
+  }
+
+  bool isTutorial() {
+    return _tutorial != null;
   }
 
   void _pressToggle(int toggleIndex) {
@@ -109,24 +116,27 @@ class _LevelState extends State<Level> {
       // Idempotent moves should not decrease your pool.
       if (_currentState != newState) {
         _currentState = newState;
-        _remainingMoves--;
+        remainingMoves--;
       }
 
       bool hasWon = !_currentState.contains("0");
       if (hasWon) {
-        gameState = STATE_WON;
+        _gameState = STATE_WON;
+        Tracking.logLevelPlayed(this, LevelResult.won);
         model.notifyCurrentLevelWon();
-      } else if (_remainingMoves == 0) {
-        gameState = STATE_FAILED;
+      } else if (remainingMoves == 0) {
+        _gameState = STATE_FAILED;
       }
     });
   }
 
   void _reset() {
     setState(() {
+      Tracking.logLevelPlayed(this, _gameState == STATE_FAILED ? LevelResult.failed : LevelResult.restarted);
       _currentState = _initialState;
-      _remainingMoves = _initialMoves;
-      gameState = STATE_PLAYING;
+      remainingMoves = initialMoves;
+      _gameState = STATE_PLAYING;
+      Tracking.logLevelStarted();
     });
   }
 
@@ -203,12 +213,12 @@ class _LevelState extends State<Level> {
   Widget build(BuildContext context) {
     MaterialColor headerColor = COLOR_GAME;
     String textToDisplay = "moves remaining";
-    if (_remainingMoves == 1) {
+    if (remainingMoves == 1) {
       textToDisplay = "move remaining";
-    } else if (gameState == STATE_FAILED) {
+    } else if (_gameState == STATE_FAILED) {
       textToDisplay = "No moves remaining";
       headerColor = COLOR_FAIL;
-    } else if (gameState == STATE_WON) {
+    } else if (_gameState == STATE_WON) {
       headerColor = COLOR_SUCCESS;
       if (model.canMoveToNextLevel()) {
         textToDisplay = "You won!";
@@ -229,7 +239,7 @@ class _LevelState extends State<Level> {
           color: Colors.transparent,
           child: InkWell(
             onTap: () {
-              if (gameState == STATE_WON && model.canMoveToNextLevel()) {
+              if (_gameState == STATE_WON && model.canMoveToNextLevel()) {
                 model.moveToNextLevel();
               } else {
                 _reset();
@@ -245,7 +255,7 @@ class _LevelState extends State<Level> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          _remainingMoves > 0 ? _remainingMoves.toString() : '',
+                          remainingMoves > 0 ? remainingMoves.toString() : '',
                           style: TextStyle(fontSize: 50.0, color: headerColor[900]),
                         ),
                       ),
@@ -254,7 +264,7 @@ class _LevelState extends State<Level> {
                   ),
                 ),
                 AnimatedCrossFade(
-                    crossFadeState: gameState == STATE_WON && model.canMoveToNextLevel() ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                    crossFadeState: _gameState == STATE_WON && model.canMoveToNextLevel() ? CrossFadeState.showFirst : CrossFadeState.showSecond,
                     duration: defaultAnimationDuration,
                     firstChild: Icon(Icons.navigate_next, color: headerColor[900], semanticLabel: 'Move to next level', size: 50),
                     secondChild: Icon(Icons.refresh, color: headerColor[900], semanticLabel: 'Restart level', size: 50)),
@@ -263,7 +273,7 @@ class _LevelState extends State<Level> {
           ),
         ),
       ),
-      if (tutorial != null)
+      if (_tutorial != null)
         Container(
           padding: const EdgeInsets.all(16.0),
           color: Colors.yellow[300],
@@ -278,7 +288,7 @@ class _LevelState extends State<Level> {
               ),
             ),
             Flexible(
-              child: Text(tutorial),
+              child: Text(_tutorial),
             )
           ]),
         ),
@@ -301,7 +311,7 @@ class _LevelState extends State<Level> {
                           color: hasAtLeastOneSwitchNth && enabledCount == index ? Colors.deepPurple[900] : Colors.deepPurple[200]),
                     ),
                   ),
-                  onChanged: gameState != STATE_PLAYING || (toggles[index] == SWITCH_NTH && enabledCount == index)
+                  onChanged: _gameState != STATE_PLAYING || (toggles[index] == SWITCH_NTH && enabledCount == index)
                       ? null
                       : (bool value) {
                           _pressToggle(index);

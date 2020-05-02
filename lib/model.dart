@@ -3,6 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:turnmeon/level_data.dart';
+import 'package:turnmeon/tracking.dart';
+
+import 'level.dart';
 
 class UnlockedLevelsModel extends ChangeNotifier {
   static const SP_KEY = "last_unlocked_level";
@@ -94,6 +97,7 @@ class UnlockedLevelsModel extends ChangeNotifier {
   @override
   void notifyListeners() {
     _writeStateToDisk();
+    Tracking.logPlayerIdentity(lastUnlockedLevel, currentlyPlayingLevel);
     super.notifyListeners();
   }
 
