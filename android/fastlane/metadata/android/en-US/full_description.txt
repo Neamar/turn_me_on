@@ -1,0 +1,10 @@
+The rules of this game are super simple: find a way to enable all toggles on screen.
+
+Sounds easy? The trick is, each toggle will mess up with the state of other toggles... find the right combination to get to the next level!
+
+Can you beat all levels? It gets harder and harder...
+
+Some toggles will switch their neighbors, others will switch everything... and you only have so many moves to get it right!
+
+-------------------------
+Turn me on is open-source! Join https://github.com/Neamar/turn_me_on/ to discuss or contribute new features :)
