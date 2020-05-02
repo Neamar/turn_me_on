@@ -1,0 +1,29 @@
+name: Build and Deploy to Github Pages
+push:
+  branches:
+    - master
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        - uses: actions/checkout@v2
+          with:
+            persist-credentials: false
+        - uses: actions/setup-java@v1
+          with:
+            java-version: '12.x'
+        - uses: subosito/flutter-action@v1
+          with:
+            flutter-version: '1.9.1+hotfix.6'
+        - run: flutter pub get
+      - name: Install and Build 🔧
+        run: |
+          make website
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: docs # The folder the action should deploy.
