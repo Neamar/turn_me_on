@@ -15,7 +15,7 @@ jobs:
           java-version: '12.x'
       - uses: subosito/flutter-action@v1
         with:
-          channel: 'stable'
+          channel: 'dev' # flutter web is not stable yet
       - run: flutter pub get
       -  run: |
           make website
