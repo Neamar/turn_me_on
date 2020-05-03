@@ -5,16 +5,24 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:turnmeon/level_data.dart';
 import 'package:turnmeon/tracking.dart';
 
-import 'level.dart';
-
 class UnlockedLevelsModel extends ChangeNotifier {
   static const SP_KEY = "last_unlocked_level";
 
   SharedPreferences _prefs;
 
+  // When loading data form disk, this'll be set to true
   bool isLoading = true;
+  // Max unlocked level for now
   int lastUnlockedLevel = -1;
+  // Level we're playing
   int currentlyPlayingLevel = -1;
+  // Level we want to reach (when furiously typing on previous / next buttons, we keep a buffer of number of times button was clicked to move fast)
+  int targetLevel = -1;
+  // When the last button Next / Previous was pressed (useful to distinguish between automatic scrolls and manual scrolls)
+  DateTime lastSlideOrder = DateTime.now();
+  // Duration of our animations
+  final Duration slideDuration = Duration(milliseconds: 500);
+
   PageController controller;
 
   Future<int> _readStateFromDisk() async {
@@ -69,9 +77,12 @@ class UnlockedLevelsModel extends ChangeNotifier {
     return !isLoading && currentlyPlayingLevel < lastUnlockedLevel;
   }
 
-  void moveToNextLevel() {
-    if (canMoveToNextLevel()) {
-      controller.animateToPage(currentlyPlayingLevel + 1, duration: Duration(milliseconds: 500), curve: Curves.ease);
+  /// Move potentially more than one level at a time (calls can stack)
+  void moveToNextTargetLevel() {
+    if(!isLoading && targetLevel < lastUnlockedLevel) {
+      lastSlideOrder = DateTime.now();
+      targetLevel++;
+      controller.animateToPage(targetLevel, duration: slideDuration, curve: Curves.ease);
     }
   }
 
@@ -79,9 +90,11 @@ class UnlockedLevelsModel extends ChangeNotifier {
     return !isLoading && currentlyPlayingLevel > 0;
   }
 
-  void moveToPreviousLevel() {
-    if (canMoveToPreviousLevel()) {
-      controller.animateToPage(currentlyPlayingLevel - 1, duration: Duration(milliseconds: 500), curve: Curves.ease);
+  void moveToPreviousTargetLevel() {
+    if(!isLoading && targetLevel > 0) {
+      lastSlideOrder = DateTime.now();
+      targetLevel--;
+      controller.animateToPage(targetLevel, duration: slideDuration, curve: Curves.ease);
     }
   }
 
@@ -91,6 +104,9 @@ class UnlockedLevelsModel extends ChangeNotifier {
     }
 
     currentlyPlayingLevel = level;
+    if(DateTime.now().difference(lastSlideOrder) > slideDuration) {
+      targetLevel = level;
+    }
     notifyListeners();
   }
 

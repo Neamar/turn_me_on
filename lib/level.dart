@@ -240,7 +240,7 @@ class LevelState extends State<Level> {
           child: InkWell(
             onTap: () {
               if (_gameState == STATE_WON && model.canMoveToNextLevel()) {
-                model.moveToNextLevel();
+                model.moveToNextTargetLevel();
               } else {
                 _reset();
               }

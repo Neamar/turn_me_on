@@ -58,7 +58,7 @@ class TurnMeOnApp extends StatelessWidget {
                       tooltip: "Move to previous level",
                       onPressed: model.canMoveToPreviousLevel()
                           ? () {
-                              model.moveToPreviousLevel();
+                              model.moveToPreviousTargetLevel();
                             }
                           : null),
                   Expanded(
@@ -72,7 +72,7 @@ class TurnMeOnApp extends StatelessWidget {
                       tooltip: "Move to next level",
                       onPressed: model.canMoveToNextLevel()
                           ? () {
-                              model.moveToNextLevel();
+                              model.moveToNextTargetLevel();
                             }
                           : null),
                 ]),
