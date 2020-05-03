@@ -63,6 +63,7 @@ class UnlockedLevelsModel extends ChangeNotifier {
     currentlyPlayingLevel = 0;
     lastUnlockedLevel = 0;
     targetLevel = 0;
+    controller.animateToPage(targetLevel, duration: slideDuration, curve: Curves.ease);
     notifyListeners();
   }
 
@@ -70,6 +71,7 @@ class UnlockedLevelsModel extends ChangeNotifier {
     lastUnlockedLevel = LevelStore.levels.length - 1;
     currentlyPlayingLevel = lastUnlockedLevel;
     targetLevel = currentlyPlayingLevel;
+    controller.animateToPage(targetLevel, duration: slideDuration, curve: Curves.ease);
     notifyListeners();
   }
 
