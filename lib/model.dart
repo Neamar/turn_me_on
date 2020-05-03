@@ -43,6 +43,7 @@ class UnlockedLevelsModel extends ChangeNotifier {
       this.isLoading = false;
       this.lastUnlockedLevel = lastUnlockedLevel;
       this.currentlyPlayingLevel = lastUnlockedLevel;
+      this.targetLevel = lastUnlockedLevel;
       print("Model loaded");
 
       // Controller to be used on our PageView
