@@ -1,9 +1,12 @@
 import 'package:app_review/app_review.dart';
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
+import 'package:turnmeon/tracking.dart';
+
+import 'model.dart';
 
 class CustomPages {
-  static Widget getSharePage(BuildContext context) {
+  static Widget getSharePage(BuildContext context, UnlockedLevelsModel model) {
     return Center(
       child: Column(
         children: <Widget>[
@@ -31,6 +34,7 @@ class CustomPages {
                   size: 30,
                 ),
                 onPressed: () {
+                  Tracking.logShareEvent();
                   Share.share('Check out this simple logic game! https://play.google.com/store/apps/details?id=fr.neamar.turnmeon');
                 },
               ),
@@ -43,6 +47,7 @@ class CustomPages {
                   size: 30,
                 ),
                 onPressed: () {
+                  Tracking.logRateEvent();
                   AppReview.requestReview.then((onValue) {
                     print(onValue);
                   });
@@ -52,9 +57,11 @@ class CustomPages {
           ),
           Spacer(flex: 3),
           RaisedButton(
-            child: Text("Back to game"),
-            onPressed: () { },
-          ),
+              child: Text("Back to game"),
+              onPressed: () {
+                Tracking.logSharePageDismissed();
+                model.hideShareScreen();
+              }),
           Spacer(flex: 1),
         ],
       ),

@@ -31,6 +31,18 @@ class Tracking {
     });
   }
 
+  static void logSharePageDismissed() {
+    analytics.logEvent("Share page dismissed");
+  }
+
+  static void logShareEvent() {
+    analytics.logEvent("Share button clicked");
+  }
+
+  static void logRateEvent() {
+    analytics.logEvent("Rate button clicked");
+  }
+
   static void logPlayerIdentity(int lastUnlockedLevel, int currentlyPlayingLevel) {
     final Identify identify = Identify()
       ..set('lastUnlockedLevel', lastUnlockedLevel)
