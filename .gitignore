@@ -10,6 +10,7 @@
 .svn/
 _site/
 .jekyll-cache
+android/fastlane/report.xml
 
 # IntelliJ related
 *.iml
