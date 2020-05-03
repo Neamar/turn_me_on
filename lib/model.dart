@@ -18,6 +18,10 @@ class UnlockedLevelsModel extends ChangeNotifier {
   int currentlyPlayingLevel = -1;
   // Level we want to reach (when furiously typing on previous / next buttons, we keep a buffer of number of times button was clicked to move fast)
   int targetLevel = -1;
+
+  bool hasDisplayedShareScren = false;
+  final int displayShareScreenOnLevel = 20;
+
   // When the last button Next / Previous was pressed (useful to distinguish between automatic scrolls and manual scrolls)
   DateTime lastSlideOrder = DateTime.now();
   // Duration of our animations
@@ -43,6 +47,13 @@ class UnlockedLevelsModel extends ChangeNotifier {
       this.isLoading = false;
       this.lastUnlockedLevel = lastUnlockedLevel;
       this.currentlyPlayingLevel = lastUnlockedLevel;
+      this.targetLevel = lastUnlockedLevel;
+
+      // If your current level is the one where we usually display the share screen, do not display again.
+      if(this.lastUnlockedLevel == displayShareScreenOnLevel) {
+        hasDisplayedShareScren = true;
+      }
+
       print("Model loaded");
 
       // Controller to be used on our PageView
@@ -72,6 +83,11 @@ class UnlockedLevelsModel extends ChangeNotifier {
     currentlyPlayingLevel = lastUnlockedLevel;
     targetLevel = currentlyPlayingLevel;
     controller.animateToPage(targetLevel, duration: slideDuration, curve: Curves.ease);
+    notifyListeners();
+  }
+
+  void hideShareScreen() {
+    hasDisplayedShareScren = true;
     notifyListeners();
   }
 

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:turnmeon/level_data.dart';
 import 'package:turnmeon/tracking.dart';
 
+import 'CustomPages.dart';
 import 'model.dart';
 
 void main() {
@@ -51,6 +52,10 @@ class TurnMeOnApp extends StatelessWidget {
               return PageView.builder(
                 controller: model.controller,
                 itemBuilder: (context, position) {
+                  if(position == 3 && model.lastUnlockedLevel == 3 && !model.hasDisplayedShareScren) {
+                    return CustomPages.getSharePage(context, model);
+                  }
+
                   return LevelStore.getLevel(position, model);
                 },
                 itemCount: model.lastUnlockedLevel + 1, // +1 since level starts at 0
@@ -97,7 +102,7 @@ class TurnMeOnApp extends StatelessWidget {
 
 class ResetButton extends StatelessWidget {
   final UnlockedLevelsModel model;
-  const ResetButton(UnlockedLevelsModel this.model);
+  const ResetButton(this.model);
 
   @override
   Widget build(BuildContext context) {
