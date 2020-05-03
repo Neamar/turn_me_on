@@ -62,6 +62,14 @@ class UnlockedLevelsModel extends ChangeNotifier {
   void reset() {
     currentlyPlayingLevel = 0;
     lastUnlockedLevel = 0;
+    targetLevel = 0;
+    notifyListeners();
+  }
+
+  void unlockAll() {
+    lastUnlockedLevel = LevelStore.levels.length - 1;
+    currentlyPlayingLevel = lastUnlockedLevel;
+    targetLevel = currentlyPlayingLevel;
     notifyListeners();
   }
 
