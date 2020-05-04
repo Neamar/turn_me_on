@@ -20,7 +20,7 @@ class UnlockedLevelsModel extends ChangeNotifier {
   int targetLevel = -1;
 
   bool hasDisplayedShareScren = false;
-  final int displayShareScreenOnLevel = 20;
+  final int levelToDisplayShareScreenOn = 20;
 
   // When the last button Next / Previous was pressed (useful to distinguish between automatic scrolls and manual scrolls)
   DateTime lastSlideOrder = DateTime.now();
@@ -50,7 +50,7 @@ class UnlockedLevelsModel extends ChangeNotifier {
       this.targetLevel = lastUnlockedLevel;
 
       // If your current level is the one where we usually display the share screen, do not display again.
-      if(this.lastUnlockedLevel == displayShareScreenOnLevel) {
+      if(this.lastUnlockedLevel == levelToDisplayShareScreenOn) {
         hasDisplayedShareScren = true;
       }
 

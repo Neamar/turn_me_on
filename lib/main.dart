@@ -52,7 +52,7 @@ class TurnMeOnApp extends StatelessWidget {
               return PageView.builder(
                 controller: model.controller,
                 itemBuilder: (context, position) {
-                  if(position == 3 && model.lastUnlockedLevel == 3 && !model.hasDisplayedShareScren) {
+                  if(position == model.levelToDisplayShareScreenOn && model.lastUnlockedLevel == model.levelToDisplayShareScreenOn && !model.hasDisplayedShareScren) {
                     return CustomPages.getSharePage(context, model);
                   }
 
