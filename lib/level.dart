@@ -214,7 +214,7 @@ class LevelState extends State<Level> {
     setState(() {
       textIsFlashing = true;
     });
-    
+
     Future.delayed(const Duration(milliseconds: 200), () {
       setState(() {
         textIsFlashing = false;
