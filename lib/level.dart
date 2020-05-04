@@ -47,7 +47,7 @@ class LevelState extends State<Level> {
   String _currentState;
   String _gameState;
 
-  AnimationController winAnimation;
+  bool textIsFlashing = false;
 
   LevelState(this.toggles, this._initialState, this.initialMoves, this._tutorial, this.model) {
     this._currentState = _initialState;
@@ -97,13 +97,12 @@ class LevelState extends State<Level> {
       } else if (toggleType == SWITCH_ABOVE) {
         String value = _switch(_currentState[toggleIndex]);
         newState = (value * (toggleIndex + 1)) + _currentState.substring(toggleIndex + 1);
-      } else if(toggleType == SWITCH_INTRICATE) {
+      } else if (toggleType == SWITCH_INTRICATE) {
         String toggledState = _switch(_currentState[toggleIndex]);
         for (int i = 0; i < _currentState.length; i++) {
-          if(i == toggleIndex) {
+          if (i == toggleIndex) {
             newState = _setToggleInState(i, toggledState, newState);
-          }
-          else if(toggles[i] == SWITCH_INTRICATE) {
+          } else if (toggles[i] == SWITCH_INTRICATE) {
             newState = _setToggleInState(i, _switch(toggledState), newState);
           }
         }
@@ -122,10 +121,12 @@ class LevelState extends State<Level> {
       bool hasWon = !_currentState.contains("0");
       if (hasWon) {
         _gameState = STATE_WON;
+        _flashText();
         Tracking.logLevelPlayed(this, LevelResult.won);
         model.notifyCurrentLevelWon();
       } else if (remainingMoves == 0) {
         _gameState = STATE_FAILED;
+        _flashText();
       }
     });
   }
@@ -209,6 +210,18 @@ class LevelState extends State<Level> {
     return 20;
   }
 
+  void _flashText() {
+    setState(() {
+      textIsFlashing = true;
+    });
+    
+    Future.delayed(const Duration(milliseconds: 200), () {
+      setState(() {
+        textIsFlashing = false;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     MaterialColor headerColor = COLOR_GAME;
@@ -259,7 +272,11 @@ class LevelState extends State<Level> {
                           style: TextStyle(fontSize: 50.0, color: headerColor[900]),
                         ),
                       ),
-                      Text(textToDisplay),
+                      AnimatedDefaultTextStyle(
+                        duration: new Duration(milliseconds: 200),
+                        style: Theme.of(context).textTheme.bodyText1.copyWith(fontSize: textIsFlashing ? Theme.of(context).textTheme.bodyText1.fontSize + 4 : Theme.of(context).textTheme.bodyText1.fontSize),
+                        child: Text(textToDisplay),
+                      )
                     ],
                   ),
                 ),
@@ -311,9 +328,14 @@ class LevelState extends State<Level> {
                           color: hasAtLeastOneSwitchNth && enabledCount == index ? Colors.deepPurple[900] : Colors.deepPurple[200]),
                     ),
                   ),
-                  onChanged: _gameState != STATE_PLAYING || (toggles[index] == SWITCH_NTH && enabledCount == index)
+                  onChanged: _gameState == STATE_FAILED || (toggles[index] == SWITCH_NTH && enabledCount == index)
                       ? null
                       : (bool value) {
+                          // When state = WON, we want to keep the toggles enabled, but clicking them shouldn't do anything
+                          if (_gameState == STATE_WON) {
+                            _flashText();
+                            return;
+                          }
                           _pressToggle(index);
                         },
                 );
