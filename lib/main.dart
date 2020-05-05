@@ -26,78 +26,65 @@ class TurnMeOnApp extends StatelessWidget {
         primarySwatch: Colors.deepPurple,
       ),
       home: ChangeNotifierProvider<UnlockedLevelsModel>(
-        create: (context) => UnlockedLevelsModel(),
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text("Turn me on"),
-            actions: <Widget>[
-              Consumer<UnlockedLevelsModel>(builder: (context, model, child) {
-                // Only display the reset button after level 3
-                if (model.lastUnlockedLevel > 3) {
-                  return ResetButton(model);
-                }
+          create: (context) => UnlockedLevelsModel(),
+          child: Consumer<UnlockedLevelsModel>(builder: (context, model, child) {
+            return Scaffold(
+                appBar: AppBar(
+                  title: Text("Turn me on"),
+                  actions: <Widget>[
+                    // Only display the reset button after level 3
+                    if (model.lastUnlockedLevel > 3)
+                      ResetButton(model),
+                    if (model.lastUnlockedLevel >= 10)
+                      FastScrollButton(model),
+                  ],
+                ),
+                body: model.isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : PageView.builder(
+                        controller: model.controller,
+                        itemBuilder: (context, position) {
+                          if (position == model.levelToDisplayShareScreenOn &&
+                              model.lastUnlockedLevel == model.levelToDisplayShareScreenOn &&
+                              !model.hasDisplayedShareScren) {
+                            return CustomPages.getSharePage(context, model);
+                          }
 
-                // Return nothing otherwise
-                return SizedBox.shrink();
-              }),
-            ],
-          ),
-          body: Consumer<UnlockedLevelsModel>(
-            builder: (context, model, child) {
-              if (model.isLoading) {
-                // SharedPreferences are not ready yet
-                return Center(child: CircularProgressIndicator());
-              }
-
-              return PageView.builder(
-                controller: model.controller,
-                itemBuilder: (context, position) {
-                  if (position == model.levelToDisplayShareScreenOn &&
-                      model.lastUnlockedLevel == model.levelToDisplayShareScreenOn &&
-                      !model.hasDisplayedShareScren) {
-                    return CustomPages.getSharePage(context, model);
-                  }
-
-                  return LevelStore.getLevel(position, model);
-                },
-                itemCount: model.lastUnlockedLevel + 1, // +1 since level starts at 0
-              );
-            },
-          ),
-          bottomNavigationBar: Consumer<UnlockedLevelsModel>(
-            builder: (context, model, child) {
-              return Material(
-                elevation: 8,
-                child: Row(children: <Widget>[
-                  IconButton(
-                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                      icon: Icon(Icons.navigate_before),
-                      tooltip: "Move to previous level",
-                      onPressed: model.canMoveToPreviousLevel()
-                          ? () {
-                              model.moveToPreviousTargetLevel();
-                            }
-                          : null),
-                  Expanded(
-                      child: Text(
-                    LevelStore.getTitleOrFallback(model.currentlyPlayingLevel),
-                    textAlign: TextAlign.center,
-                  )),
-                  IconButton(
-                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                      icon: Icon(Icons.navigate_next),
-                      tooltip: "Move to next level",
-                      onPressed: model.canMoveToNextLevel()
-                          ? () {
-                              model.moveToNextTargetLevel();
-                            }
-                          : null),
-                ]),
-              );
-            },
-          ),
-        ),
-      ),
+                          return LevelStore.getLevel(position, model);
+                        },
+                        itemCount: model.lastUnlockedLevel + 1, // +1 since level starts at 0
+                      ),
+                bottomNavigationBar: model.isLoading
+                    ? null
+                    : Material(
+                        elevation: 8,
+                        child: Row(children: <Widget>[
+                          IconButton(
+                              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                              icon: Icon(Icons.navigate_before),
+                              tooltip: "Move to previous level",
+                              onPressed: model.canMoveToPreviousLevel()
+                                  ? () {
+                                      model.moveToPreviousTargetLevel();
+                                    }
+                                  : null),
+                          Expanded(
+                              child: Text(
+                            LevelStore.getTitleOrFallback(model.currentlyPlayingLevel),
+                            textAlign: TextAlign.center,
+                          )),
+                          IconButton(
+                              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                              icon: Icon(Icons.navigate_next),
+                              tooltip: "Move to next level",
+                              onPressed: model.canMoveToNextLevel()
+                                  ? () {
+                                      model.moveToNextTargetLevel();
+                                    }
+                                  : null),
+                        ]),
+                      ));
+          })),
     );
   }
 }
@@ -153,6 +140,32 @@ class ResetButton extends StatelessWidget {
             );
           },
         );
+      },
+    );
+  }
+}
+
+class FastScrollButton extends StatelessWidget {
+  final UnlockedLevelsModel model;
+
+  const FastScrollButton(this.model);
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton<int>(
+      icon: Icon(Icons.history),
+      onSelected: (int item) {
+        model.setTargetLevel(item);
+      },
+      itemBuilder: (BuildContext context) {
+        List<PopupMenuItem<int>> items = [];
+        for (int i = 0; i <= model.lastUnlockedLevel; i++) {
+          if (LevelStore.getTitle(i) != null) {
+            items.add(PopupMenuItem<int>(value: i, child: Text(LevelStore.getTitle(i))));
+          }
+        }
+
+        return items;
       },
     );
   }

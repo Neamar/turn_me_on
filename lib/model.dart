@@ -124,6 +124,14 @@ class UnlockedLevelsModel extends ChangeNotifier {
     }
   }
 
+  void setTargetLevel(int level) {
+    if(!isLoading && level > 0 && level <= lastUnlockedLevel) {
+      lastSlideOrder = DateTime.now();
+      targetLevel = level;
+      controller.jumpToPage(targetLevel);
+    }
+  }
+
   void loadLevel(int level) {
     if (level < 0 || level >= LevelStore.levels.length) {
       throw ("Level value is out of bounds");
