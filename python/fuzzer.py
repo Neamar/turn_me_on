@@ -4,7 +4,7 @@ from random import random
 
 def fuzz_level(level):
   longest_solution_size = 0
-  best_option = ['', -1]
+  best_option = ('', '')
 
   for initial_state_arr in product(["0", "1"], repeat=len(level)):
     initial_state = ''.join(initial_state_arr)

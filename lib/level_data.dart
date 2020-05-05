@@ -50,13 +50,16 @@ class LevelStore {
     LevelData("↕∀C%%", "11001", 5),
     LevelData("%%↕↕↕", "00011", 5),
     LevelData("%%%↕T", "00110", 5),
+    LevelData('%⇑%∀%', '10001', 5),
     LevelData("T∀%CT%", "100011", 6),
     LevelData("%⇑TT%", "01000", 5),
     // Switch "sum of"
     LevelData('T↕↕N', '0010', 2),
     LevelData('∀↕↕CTN', '001000', 3, "Notice the switch displayed in deep purple?\nIt indicates which toggle will be impacted by ∑."),
+    LevelData('N∀∀', '100', 4),
     LevelData('NC∀∀', '0011', 5),
-    LevelData('↕↕N↕', '0101', 6),
+    LevelData('↕↕N↕', '0101', 6, "Only three levels left to finish the game!"),
+    LevelData('T↕%⇑CN%∀', '01010111', 6),
     LevelData('T∀N∀∀∀', '001110', 11),
   ];
 
