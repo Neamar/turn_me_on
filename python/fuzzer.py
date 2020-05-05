@@ -22,13 +22,13 @@ def fuzz_level(level):
 # print(solve_level('↕%%', '101'))
 # raise "stop"
 
-LEVEL_SIZE = 5
+LEVEL_SIZE = 3
 uninteresting_sequence = ''.join([str(i+1) for i in range(LEVEL_SIZE)])
 # T∀↕C%⇑N
-for potential_level_arr in product(["T", "∀", "↕", "C", "%", "⇑"], repeat=LEVEL_SIZE):
+for potential_level_arr in product(["T", "∀", "↕", "C", "%", "⇑", "N"], repeat=LEVEL_SIZE):
   if potential_level_arr[0] == "C" or potential_level_arr[-1] == "C":
     continue
-  if potential_level_arr.count('%') < 2:
+  if potential_level_arr.count('%') == 1:
     continue
   if potential_level_arr.count('T') > 3:
     continue

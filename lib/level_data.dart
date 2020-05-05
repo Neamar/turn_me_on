@@ -57,6 +57,7 @@ class LevelStore {
     LevelData('T↕↕N', '0010', 2),
     LevelData('∀↕↕CTN', '001000', 3, "Notice the switch displayed in deep purple?\nIt indicates which toggle will be impacted by ∑."),
     LevelData('N∀∀', '100', 4),
+    LevelData('↕N∀', '010', 4),
     LevelData('NC∀∀', '0011', 5),
     LevelData('↕↕N↕', '0101', 6, "Only three levels left to finish the game!"),
     LevelData('T↕%⇑CN%∀', '01010111', 6),

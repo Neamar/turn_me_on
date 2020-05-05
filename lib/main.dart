@@ -78,7 +78,7 @@ class TurnMeOnApp extends StatelessWidget {
                           : null),
                   Expanded(
                       child: Text(
-                    model.currentlyPlayingLevel == 0 ? 'Tutorial' : 'Level #' + model.currentlyPlayingLevel.toString(),
+                    model.currentlyPlayingLevel == 0 ? 'Tutorial' : (model.currentlyPlayingLevel == LevelStore.levels.length - 1 ? 'The final level' : 'Level #' + model.currentlyPlayingLevel.toString()),
                     textAlign: TextAlign.center,
                   )),
                   IconButton(

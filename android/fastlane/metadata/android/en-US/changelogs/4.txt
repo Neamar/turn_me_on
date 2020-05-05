@@ -1,0 +1,2 @@
+* Added an animation on victory and defeat
+* Keep toggles enabled after victory
