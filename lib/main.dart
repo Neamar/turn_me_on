@@ -33,7 +33,7 @@ class TurnMeOnApp extends StatelessWidget {
             actions: <Widget>[
               Consumer<UnlockedLevelsModel>(builder: (context, model, child) {
                 // Only display the reset button after level 3
-                if(model.lastUnlockedLevel > 3) {
+                if (model.lastUnlockedLevel > 3) {
                   return ResetButton(model);
                 }
 
@@ -52,7 +52,9 @@ class TurnMeOnApp extends StatelessWidget {
               return PageView.builder(
                 controller: model.controller,
                 itemBuilder: (context, position) {
-                  if(position == model.levelToDisplayShareScreenOn && model.lastUnlockedLevel == model.levelToDisplayShareScreenOn && !model.hasDisplayedShareScren) {
+                  if (position == model.levelToDisplayShareScreenOn &&
+                      model.lastUnlockedLevel == model.levelToDisplayShareScreenOn &&
+                      !model.hasDisplayedShareScren) {
                     return CustomPages.getSharePage(context, model);
                   }
 
@@ -78,7 +80,7 @@ class TurnMeOnApp extends StatelessWidget {
                           : null),
                   Expanded(
                       child: Text(
-                    model.currentlyPlayingLevel == 0 ? 'Tutorial' : (model.currentlyPlayingLevel == LevelStore.levels.length - 1 ? 'The final level' : 'Level #' + model.currentlyPlayingLevel.toString()),
+                    LevelStore.getTitleOrFallback(model.currentlyPlayingLevel),
                     textAlign: TextAlign.center,
                   )),
                   IconButton(
@@ -102,6 +104,7 @@ class TurnMeOnApp extends StatelessWidget {
 
 class ResetButton extends StatelessWidget {
   final UnlockedLevelsModel model;
+
   const ResetButton(this.model);
 
   @override
