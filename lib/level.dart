@@ -327,6 +327,7 @@ class LevelState extends State<Level> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: _getIconSize(toggles[index]),
+                          fontFamily: 'Roboto',
                           color: hasAtLeastOneSwitchNth && enabledCount == index + 1 ? Colors.deepPurple[900] : Colors.deepPurple[200]),
                     ),
                   ),

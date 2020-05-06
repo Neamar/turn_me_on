@@ -1,0 +1,2 @@
+* Changed all final levels, the sigma toggle now works more intuitively.
+* Hopefully fixes an issue on Samsung devices where symobls are displayed as emojis
