@@ -60,13 +60,16 @@ class LevelStore {
 
     // Switch "sum of"
     LevelData('T↕↕N', '0010', 2, title: "Final switch: ∑"),
-    LevelData('∀↕↕CTN', '001000', 3, tutorial: "Notice the switch displayed in deep purple?\nIt indicates which toggle will be impacted by ∑."),
-    LevelData('N∀∀', '100', 4),
-    LevelData('↕N∀', '010', 4),
-    LevelData('NC∀∀', '0011', 5),
-    LevelData('↕↕N↕', '0101', 6, tutorial: "Only three levels left to finish the game!"),
-    LevelData('T↕%⇑CN%∀', '01010111', 6),
-    LevelData('T∀N∀∀∀', '001110', 11, title: "The final level"),
+    LevelData('TNT', '100', 3, tutorial: "The ∑ switch can never act on itself."),
+    LevelData('∀↕↕CTN', '001000', 4, tutorial: "Notice the switch displayed in deep purple?\nIt indicates which toggle will be impacted by ∑."),
+    LevelData("∀CN", "001", 4),
+    LevelData("↕N↕", "101", 5),
+    LevelData("↕CNT", "0111", 4),
+    LevelData("%NT%", "1100", 5),
+    LevelData("↕N∀T", "0101", 6),
+    LevelData("N⇑%%", "0100", 6, tutorial: "Only three levels left to finish the game!"),
+    LevelData("%N%∀∀", "00110", 9),
+    LevelData("↕NT∀∀∀", "011010", 11, title: "The final level"),
   ];
 
   static Level getLevel(int levelNumber, UnlockedLevelsModel model) {

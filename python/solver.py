@@ -51,7 +51,8 @@ def press_switch(toggle_index, level, state):
     new_state = state[:]
     enabled_count = new_state.count("1")
     switch_toggle(toggle_index, new_state)
-    switch_toggle(enabled_count, new_state)
+    if(enabled_count > 0):
+      switch_toggle(enabled_count - 1, new_state)
     return new_state
 
   raise Exception("Unknown toggle type: %s in %s" % (toggle_type, level))
