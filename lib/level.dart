@@ -109,7 +109,9 @@ class LevelState extends State<Level> {
       } else if (toggleType == SWITCH_NTH) {
         int enabledCount = "1".allMatches(_currentState).length;
         newState = _switchToggleInState(toggleIndex, newState);
-        newState = _switchToggleInState(enabledCount, newState);
+        if(enabledCount > 0) {
+          newState = _switchToggleInState(enabledCount - 1, newState);
+        }
       }
 
       // Idempotent moves should not decrease your pool.
@@ -325,10 +327,10 @@ class LevelState extends State<Level> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: _getIconSize(toggles[index]),
-                          color: hasAtLeastOneSwitchNth && enabledCount == index ? Colors.deepPurple[900] : Colors.deepPurple[200]),
+                          color: hasAtLeastOneSwitchNth && enabledCount == index + 1 ? Colors.deepPurple[900] : Colors.deepPurple[200]),
                     ),
                   ),
-                  onChanged: _gameState == STATE_FAILED || (toggles[index] == SWITCH_NTH && enabledCount == index)
+                  onChanged: _gameState == STATE_FAILED || (toggles[index] == SWITCH_NTH && enabledCount == index + 1)
                       ? null
                       : (bool value) {
                           // When state = WON, we want to keep the toggles enabled, but clicking them shouldn't do anything

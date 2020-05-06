@@ -108,7 +108,7 @@ class ResetButton extends StatelessWidget {
               content: new Text("This will clear all your progress. You'll need to finish again each level to get back to your current level."),
               actions: <Widget>[
                 new FlatButton(
-                  child: new Text("Close"),
+                  child: new Text("Cancel"),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },

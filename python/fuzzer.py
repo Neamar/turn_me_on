@@ -19,10 +19,10 @@ def fuzz_level(level):
   return best_option
 
 # print(press_switch(1, ['↕', '%', '%'], [ '1', '0', '1']))
-# print(solve_level('↕%%', '101'))
+# print(solve_level('∀↕↕CTN', '001000'))
 # raise "stop"
 
-LEVEL_SIZE = 3
+LEVEL_SIZE = 6
 uninteresting_sequence = ''.join([str(i+1) for i in range(LEVEL_SIZE)])
 # T∀↕C%⇑N
 for potential_level_arr in product(["T", "∀", "↕", "C", "%", "⇑", "N"], repeat=LEVEL_SIZE):
