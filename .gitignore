@@ -42,6 +42,7 @@ android/fastlane/report.xml
 **/android/local.properties
 **/android/**/GeneratedPluginRegistrant.java
 **/android/key.properties
+.gradle
 
 # iOS/XCode related
 **/ios/**/*.mode1v3
