@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
@@ -10,9 +9,7 @@ import 'model.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  Tracking.analytics.init(kReleaseMode ? "1f39eabedbcc6c75a33904d60e2414ad" : "f3f5aa45784b01e4782cc98c605d43c4");
-  Tracking.analytics.enableCoppaControl();
-  Tracking.analytics.trackingSessionEvents(true);
+  Tracking.init();
   runApp(TurnMeOnApp());
 }
 

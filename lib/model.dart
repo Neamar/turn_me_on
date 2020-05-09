@@ -54,7 +54,7 @@ class UnlockedLevelsModel extends ChangeNotifier {
         hasDisplayedShareScren = true;
       }
 
-      print("Model loaded");
+      print("Model loaded, lastUnlocked=" + this.lastUnlockedLevel.toString());
 
       // Controller to be used on our PageView
       controller = PageController(initialPage: currentlyPlayingLevel, keepPage: false);
