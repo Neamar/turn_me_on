@@ -203,12 +203,6 @@ class LevelState extends State<Level> {
   }
 
   double _getIconSize(String toggleType) {
-    if (toggleType == SWITCH_AROUND) {
-      return 25;
-    } else if (toggleType == SWITCH_NTH) {
-      return 18;
-    }
-
     return 20;
   }
 
@@ -327,7 +321,7 @@ class LevelState extends State<Level> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: _getIconSize(toggles[index]),
-                          fontFamily: 'RobotoMono',
+                          fontFamily: 'NotoSansTCStripped',
                           color: hasAtLeastOneSwitchNth && enabledCount == index + 1 ? Colors.deepPurple[900] : Colors.deepPurple[200]),
                     ),
                   ),
