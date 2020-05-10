@@ -1,12 +1,12 @@
 'use strict';
 const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
-  "main.dart.js": "fb922fb9c50c22b50b3f03990840c8d4",
-"assets/fonts/RobotoMono-Regular.ttf": "b4618f1f7f4cee0ac09873fcc5a966f9",
+  "main.dart.js": "d1858ddf9c1b2d7a03349ee0071aab5d",
+"assets/fonts/NotoSansTC-Regular-stripped.ttf": "2ec5a3c060c6c3a720ea75668503a0ac",
 "assets/fonts/MaterialIcons-Regular.ttf": "56d3ffdef7a25659eab6a68a3fbfaf16",
-"assets/FontManifest.json": "10c1b9abad060266b6a1338d841b3933",
+"assets/FontManifest.json": "11937e8054294362fe0a124c09e45952",
 "assets/LICENSE": "a1fc4fb36fc110f1d9c112e5b60aacae",
-"assets/AssetManifest.json": "207f69b203b038a2d18179cd3927d463",
+"assets/AssetManifest.json": "4bc20d89265a622f8c08919d5eb0ee45",
 "manifest.json": "9393a5d5fb21a7e5aed029d4dc88c278",
 "small.html": "56ea78eddb59699af46f87f7ca8c43f4",
 "icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
