@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -105,9 +106,9 @@ class UnlockedLevelsModel extends ChangeNotifier {
 
   /// Move potentially more than one level at a time (calls can stack)
   void moveToNextTargetLevel() {
-    if(!isLoading && targetLevel < lastUnlockedLevel) {
+    if(!isLoading) {
       lastSlideOrder = DateTime.now();
-      targetLevel++;
+      targetLevel = min(lastUnlockedLevel, targetLevel + 1);
       controller.animateToPage(targetLevel, duration: slideDuration, curve: Curves.ease);
     }
   }
