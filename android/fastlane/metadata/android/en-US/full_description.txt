@@ -7,4 +7,11 @@ Can you beat all levels? It gets harder and harder...
 Some toggles will switch their neighbors, others will switch everything... and you only have so many moves to get it right!
 
 -------------------------
+"Turn me on" is built as a tribute to the old games of before: no need to log back in every day, no need to invite friends to play more free levels, back then, you didn't have to log in every day, you didn't have to invite three friends to play more levels, you didn't have infinite progression, you didn't have to watch ads til kingdom come.
+The game would just build on top of a basic idea, and once you're done with the game, it wouldn't try to get you back at any cost every week.
+
+This is a one time experience, kinda like an escape game.
+See this game as digital detox: once you've finished the 43 levels, you're done. You can resume your work, or go back to your life, hopefully a little happier than before :)
+
+-------------------------
 Turn me on is open-source! Join https://github.com/Neamar/turn_me_on/ to discuss or contribute new features :)
